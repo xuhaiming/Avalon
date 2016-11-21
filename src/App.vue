@@ -1,21 +1,28 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
+    <h1>{{ title }}</h1>
+    <p>Your name</p>
+    <input v-model="name" type="text" />
+    <button @click="joinRoom">Login</button>
   </div>
 </template>
 
 <script>
 import io from 'socket.io-client'
 const socket = io()
-socket.emit('chat message', 'abc');
 
 export default {
   name: 'app',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      title: 'Avalon'
+    }
+  },
+  methods: {
+    joinRoom() {
+      socket.emit('join room', {
+        name: this.name
+      })
     }
   }
 }
@@ -33,16 +40,6 @@ export default {
 
 h1, h2 {
   font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
 }
 
 a {

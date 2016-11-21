@@ -20,12 +20,18 @@ app.get('/', (req, res) => {
   res.sendfile('index.html')
 })
 
+let appData = {
+    rooms: [],
+    users: []
+}
+
 io.on('connection', socket => {
-  console.log('a user connected');
-  socket.on('chat message', msg => {
-    console.log('message: ' + msg);
-  });
-});
+  socket.on('join room', data => {
+    console.log('data: ' + data.name + data.room)
+    socket.join(data.room)
+    socket.to(data.room).emit('start')
+  })
+})
 
 http.listen(1000, () => {
   console.log('Example app listening on port 1000!')
