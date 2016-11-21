@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <router-view></router-view>
     <h1>{{ title }}</h1>
     <p>Your name</p>
     <input v-model="name" type="text" />
