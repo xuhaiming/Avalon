@@ -6,7 +6,6 @@ const webpackHotMiddleWare = require("webpack-hot-middleware")
 const config = require('./webpack.config')
 const compiler = webpack(config)
 
-
 app.use(webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
     stats: { colors: true }
@@ -14,10 +13,20 @@ app.use(webpackMiddleware(compiler, {
 
 app.use(webpackHotMiddleWare(compiler))
 
-app.get('/', function (req, res) {
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
+
+app.get('/', (req, res) => {
   res.sendfile('index.html')
 })
 
-app.listen(1000, function () {
+io.on('connection', socket => {
+  console.log('a user connected');
+  socket.on('chat message', msg => {
+    console.log('message: ' + msg);
+  });
+});
+
+http.listen(1000, () => {
   console.log('Example app listening on port 1000!')
 })
