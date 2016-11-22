@@ -45,15 +45,22 @@ io.on('connection', socket => {
     appData.rooms.push({
       host: username,
       name: `${username}'s game`,
-      players: [username]
+      players: [{
+        name: username
+      }],
+      status: 'created'
     })
+    io.sockets.emit('rooms update', appData.rooms)
   })
 
   socket.on('join room', data => {
-    appData.rooms.find(room => room.host === data.host).players.push(data.username)
+    appData.rooms.find(room => room.host === data.host).players.push({
+      name: data.username
+    })
+    io.sockets.emit('rooms update', appData.rooms)
   })
 })
 
-http.listen(1000, () => {
-  console.log('Example app listening on port 1000!')
+http.listen(2000, () => {
+  console.log('Avalon app is running on port 2000!')
 })

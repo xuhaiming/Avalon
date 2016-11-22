@@ -30,6 +30,10 @@ export default {
       this.io.socket.on('user update', users => {
         this.$store.dispatch('users_update', users)
       })
+
+      this.io.socket.on('rooms update', rooms => {
+        this.$store.dispatch('rooms_update', rooms)
+      })
     }
   }
 }

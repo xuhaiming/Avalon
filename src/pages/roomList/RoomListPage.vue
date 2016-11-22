@@ -1,22 +1,44 @@
 <template>
   <div class="room-list-page">
     <p>Your name: {{user.name}}</p>
-    <button>Create Room</button>
+    <button @click="createRoom">Create Room</button>
     <p>Rooms</p>
+    <div v-for="room in rooms.list">
+      <h3>{{ room.name }}</h3>
+      <button v-if="isNotInRoom(room)" @click="joinRoom(room)">Join</button>
+      <p v-for="player in room.players">{{ player.name }}</p>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import _ from 'lodash'
 
 export default {
   name: 'roomListPage',
   computed: mapState([
-    'user'
+    'io',
+    'user',
+    'rooms'
   ]),
   created() {
     if (!this.user.name) {
       this.$router.push('login')
+    }
+  },
+  methods: {
+    createRoom() {
+      this.io.socket.emit('create room', this.user.name)
+    },
+    joinRoom(room) {
+      this.io.socket.emit('join room', {
+        host: room.host,
+        username: this.user.name
+      })
+    },
+    isNotInRoom(room) {
+      return !_.find(room.players, player => player.name === this.user.name)
     }
   }
 }
