@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import modules from './store'
 import LoginPage from './pages/login/LoginPage.vue'
 import RoomListPage from './pages/roomList/RoomListPage.vue'
+import RoomPage from './pages/room/RoomPage.vue'
 import io from 'socket.io-client'
 
 Vue.use(VueRouter)
@@ -13,6 +14,7 @@ Vue.use(Vuex)
 const routes = [
   { path: '/', component: LoginPage },
   { path: '/rooms', component: RoomListPage },
+  { path: '/room/:id', component: RoomPage },  
   { path: '/*', redirect: '/' }
 ]
 

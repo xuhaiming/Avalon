@@ -27,13 +27,17 @@ let appData = {
     users: []
 }
 
+app.get('/api/rooms', (req, res) => {
+  res.send(appData.rooms)
+})
+
 io.on('connection', socket => {
   socket.emit('user update', appData.users)
 
   socket.on('login', name => {
     socket.username = name
     appData.users.push({ name })
-    io.sockets.emit('user update', appData.users)    
+    io.sockets.emit('user update', appData.users)
   })
 
   socket.on('disconnect', () => {

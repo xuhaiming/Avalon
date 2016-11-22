@@ -14,6 +14,7 @@
 <script>
 import { mapState } from 'vuex'
 import _ from 'lodash'
+import axios from 'axios'
 
 export default {
   name: 'roomListPage',
@@ -25,6 +26,8 @@ export default {
   created() {
     if (!this.user.name) {
       this.$router.push('login')
+    } else {
+      this.getRooms()
     }
   },
   methods: {
@@ -39,6 +42,12 @@ export default {
     },
     isNotInRoom(room) {
       return !_.find(room.players, player => player.name === this.user.name)
+    },
+    getRooms() {
+      axios.get('/api/rooms')
+        .then(response => {
+          this.$store.dispatch('rooms_update', response.data)
+        })
     }
   }
 }
