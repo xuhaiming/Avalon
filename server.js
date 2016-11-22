@@ -40,6 +40,18 @@ io.on('connection', socket => {
     _.remove(appData.users, user => user.name === socket.username)
     io.sockets.emit('user update', appData.users)
   })
+
+  socket.on('create room', username => {
+    appData.rooms.push({
+      host: username,
+      name: `${username}'s game`,
+      players: [username]
+    })
+  })
+
+  socket.on('join room', data => {
+    appData.rooms.find(room => room.host === data.host).players.push(data.username)
+  })
 })
 
 http.listen(1000, () => {
