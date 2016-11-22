@@ -1,15 +1,14 @@
 <template>
   <div id="app">
+    <h1>{{title}}</h1>
     <router-view></router-view>
-    <h1>{{ title }}</h1>
-    <p>Your name</p>
-    <input v-model="name" type="text" />
-    <button @click="joinRoom">Login</button>
   </div>
 </template>
 
 <script>
 import io from 'socket.io-client'
+import { mapState } from 'vuex'
+
 const socket = io()
 
 export default {
@@ -19,10 +18,17 @@ export default {
       title: 'Avalon'
     }
   },
+  computed: mapState([
+    'io'
+  ]),
+  created() {
+    this.$store.dispatch('io_setSocket', socket)
+    this.initializeSocket()
+  },
   methods: {
-    joinRoom() {
-      socket.emit('join room', {
-        name: this.name
+    initializeSocket() {
+      this.io.socket.on('user update', users => {
+        this.$store.dispatch('users_update', users)
       })
     }
   }

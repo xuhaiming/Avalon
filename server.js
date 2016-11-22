@@ -1,9 +1,11 @@
 const express = require('express')
-const app = express()
 const webpack = require('webpack')
 const webpackMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleWare = require("webpack-hot-middleware")
 const config = require('./webpack.config')
+const _ = require('lodash')
+
+const app = express()
 const compiler = webpack(config)
 
 app.use(webpackMiddleware(compiler, {
@@ -26,10 +28,17 @@ let appData = {
 }
 
 io.on('connection', socket => {
-  socket.on('join room', data => {
-    console.log('data: ' + data.name + data.room)
-    socket.join(data.room)
-    socket.to(data.room).emit('start')
+  socket.emit('user update', appData.users)
+
+  socket.on('login', name => {
+    socket.username = name
+    appData.users.push({ name })
+    io.sockets.emit('user update', appData.users)    
+  })
+
+  socket.on('disconnect', () => {
+    _.remove(appData.users, user => user.name === socket.username)
+    io.sockets.emit('user update', appData.users)
   })
 })
 
