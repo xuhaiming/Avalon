@@ -5,6 +5,7 @@ const webpackHotMiddleWare = require("webpack-hot-middleware")
 const config = require('./webpack.config')
 const _ = require('lodash')
 const shortid = require('shortid')
+const missions = require('./rules/missions')
 
 const app = express()
 const compiler = webpack(config)
@@ -86,6 +87,17 @@ io.on('connection', socket => {
     let user = room.players.find(player => player.name === data.username)
 
     user.status = 'ready'
+
+    if (_.every(room.players, { status: 'ready'}) && room.players.length >= 5) {
+      const roles = _.find(missions, { totalCount: room.players.length }).roles
+      const shuffledRoles = _.shuffle(roles)
+
+      shuffledRoles.forEach((role, index) => {
+        room.players[index].role = role
+      })
+
+      room.status = 'started'
+    }
     
     io.to(room.id).emit('room update', room)
   })
