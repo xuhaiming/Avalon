@@ -14,7 +14,7 @@ Vue.use(Vuex)
 const routes = [
   { path: '/', component: LoginPage },
   { path: '/rooms', component: RoomListPage },
-  { path: '/room/:id', component: RoomPage },  
+  { path: '/rooms/:id', component: RoomPage },  
   { path: '/*', redirect: '/' }
 ]
 

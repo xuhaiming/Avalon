@@ -26,7 +26,7 @@ export default {
     login() {
       this.io.socket.emit('login', this.name)
       this.$store.dispatch('user_setName', this.name)
-      this.$router.push('rooms')
+      this.$router.push('/rooms')
     }
   }
 }

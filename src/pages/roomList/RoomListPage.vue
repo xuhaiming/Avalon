@@ -25,18 +25,21 @@ export default {
   ]),
   created() {
     if (!this.user.name) {
-      this.$router.push('login')
+      this.$router.push('/login')
     } else {
       this.getRooms()
     }
   },
   methods: {
     createRoom() {
-      this.io.socket.emit('create room', this.user.name)
+      this.io.socket.emit('create room', this.user.name, room => {
+        this.$store.dispatch('room_setCurrent', room)
+        this.$router.push(`/rooms/${room.id}`)
+      })
     },
     joinRoom(room) {
       this.io.socket.emit('join room', {
-        host: room.host,
+        id: room.id,
         username: this.user.name
       })
     },

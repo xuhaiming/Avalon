@@ -4,6 +4,7 @@ const webpackMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleWare = require("webpack-hot-middleware")
 const config = require('./webpack.config')
 const _ = require('lodash')
+const shortid = require('shortid')
 
 const app = express()
 const compiler = webpack(config)
@@ -45,21 +46,28 @@ io.on('connection', socket => {
     io.sockets.emit('user update', appData.users)
   })
 
-  socket.on('create room', username => {
-    appData.rooms.push({
+  socket.on('create room', (username, callback) => {
+    const newRoom = {
+      id: shortid.generate(),
       host: username,
       name: `${username}'s game`,
       players: [{
-        name: username
+        name: username,
+        status: 'joined'
       }],
       status: 'created'
-    })
+    }
+
+    appData.rooms.push(newRoom)
+    callback(newRoom)
+
     io.sockets.emit('rooms update', appData.rooms)
   })
 
   socket.on('join room', data => {
-    appData.rooms.find(room => room.host === data.host).players.push({
-      name: data.username
+    appData.rooms.find(room => room.id === data.id).players.push({
+      name: data.username,
+      status: 'joined'
     })
     io.sockets.emit('rooms update', appData.rooms)
   })
