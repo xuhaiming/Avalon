@@ -1,6 +1,11 @@
 <template>
   <div id="room">
-      {{ room.current.name }}
+      <h2>{{ room.current.name }}</h2>
+      <h4>Players</h4>
+      <div v-for="player in room.current.players">
+        <span>{{ player.name }}: </span>
+        <span>{{ player.status === 'joined' ? 'not ready' : 'ready' }}</span>
+      </div>
   </div>
 </template>
 <script>
