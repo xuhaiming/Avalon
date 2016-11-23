@@ -1,11 +1,12 @@
 <template>
   <div id="room">
-      <h2>{{ room.current.name }}</h2>
+      <h2>{{ room.name }}</h2>
       <h4>Players</h4>
-      <div v-for="player in room.current.players">
+      <div v-for="player in room.players">
         <span>{{ player.name }}: </span>
-        <span>{{ player.status === 'joined' ? 'not ready' : 'ready' }}</span>
+        <span>{{ getPlayerStatus(player.status) }}</span>
       </div>
+      <button @click="ready">ready</button>
   </div>
 </template>
 <script>
@@ -18,10 +19,28 @@ export default {
       this.$router.push('/login')
     }
   },
-  computed: mapState([
-    'io',
-    'user',
-    'room'
-  ])
+  computed: mapState({
+    io: 'io',
+    user: 'user',
+    name: 'name',
+    room: state => state.room.current
+  }),
+  methods: {
+    getPlayerStatus(status) {
+      const statusMapping = {
+        joined: 'not ready',
+        ready: 'ready',
+        offline: 'offline'
+      }
+
+      return statusMapping[status]
+    },
+    ready() {
+      this.io.socket.emit('user ready', {
+        roomId: this.room.id,
+        username: this.user.name
+      })
+    }
+  }
 }
 </script>

@@ -34,6 +34,10 @@ export default {
       this.io.socket.on('rooms update', rooms => {
         this.$store.dispatch('rooms_update', rooms)
       })
+
+      this.io.socket.on('room update', room => {
+        this.$store.dispatch('room_setCurrent', room)
+      })
     }
   }
 }

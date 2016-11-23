@@ -31,17 +31,18 @@ export default {
     }
   },
   methods: {
+    navigateToRoom(room) {
+      this.$store.dispatch('room_setCurrent', room)
+      this.$router.push(`/rooms/${room.id}`)
+    },
     createRoom() {
-      this.io.socket.emit('create room', this.user.name, room => {
-        this.$store.dispatch('room_setCurrent', room)
-        this.$router.push(`/rooms/${room.id}`)
-      })
+      this.io.socket.emit('create room', this.user.name, this.navigateToRoom)
     },
     joinRoom(room) {
       this.io.socket.emit('join room', {
         id: room.id,
         username: this.user.name
-      })
+      }, this.navigateToRoom)
     },
     isNotInRoom(room) {
       return !_.find(room.players, player => player.name === this.user.name)

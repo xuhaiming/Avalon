@@ -62,14 +62,32 @@ io.on('connection', socket => {
     callback(newRoom)
 
     io.sockets.emit('rooms update', appData.rooms)
+
+    socket.join(newRoom.id)
   })
 
-  socket.on('join room', data => {
-    appData.rooms.find(room => room.id === data.id).players.push({
+  socket.on('join room', (data, callback) => {
+    let joinedRoom = appData.rooms.find(room => room.id === data.id)
+
+    joinedRoom.players.push({
       name: data.username,
       status: 'joined'
     })
+    callback(joinedRoom)
+
     io.sockets.emit('rooms update', appData.rooms)
+
+    socket.join(joinedRoom.id)
+    io.to(joinedRoom.id).emit('room update', joinedRoom)
+  })
+
+  socket.on('user ready', data => {
+    let room = appData.rooms.find(room => room.id === data.roomId)
+    let user = room.players.find(player => player.name === data.username)
+
+    user.status = 'ready'
+    
+    io.to(room.id).emit('room update', room)
   })
 })
 
