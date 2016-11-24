@@ -1,5 +1,6 @@
 <template>
   <div id="room">
+      <h3>Your name: {{ this.user.name }}</h3>
       <h2>{{ room.name }}</h2>
       <div v-if="room.status === 'created'">
         <h4>Players</h4>
@@ -13,7 +14,7 @@
       <div v-if="room.status === 'started'">
         <h4>You are {{ currentUser.role }}</h4>
         <h5>You can see</h5>
-        <p></p>
+        <p v-for="personCanSee in getPlayersCanSee()">{{ personCanSee.name }}</p>
       </div>
   </div>
 </template>
@@ -44,6 +45,13 @@ export default {
       }
 
       return statusMapping[status]
+    },
+    getPlayersCanSee() {
+      const players = this.room.players
+      const rolesCanSee = roles[this.currentUser.role].canSee
+      const playersCanSee = _.filter(players, player => _.includes(rolesCanSee, player.role))
+
+      return playersCanSee
     },
     ready() {
       this.io.socket.emit('user ready', {

@@ -1,7 +1,7 @@
 module.exports = {
   merlin: {
 		camp: 'justice',
-		known: [
+		canSee: [
 			'morgana',
 			'assassin',
 			'oberon',
@@ -10,17 +10,18 @@ module.exports = {
 	},
 	percivale: {
 		camp: 'justice',
-		known: [
+		canSee: [
 			'merlin',
 			'morgana'
 		]
 	},
 	loyal: {
-		camp: 'justice'
+		camp: 'justice',
+		canSee: []
 	},
 	morgana: {
 		camp: 'evil',
-		known: [
+		canSee: [
 			'assassin',
 			'mordred',
 			'minions'
@@ -28,7 +29,7 @@ module.exports = {
 	},
 	assassin: {
 		camp: 'evil',
-		known: [
+		canSee: [
 			'morgana',
 			'mordred',
 			'minions'
@@ -36,7 +37,7 @@ module.exports = {
 	},
 	mordred: {
 		camp: 'evil',
-		known: [
+		canSee: [
 			'morgana',
 			'assassin',
 			'mordred',
@@ -44,11 +45,12 @@ module.exports = {
 		]
 	},
 	oberon: {
-		camp: 'evil'
+		camp: 'evil',
+		canSee: []
 	},
 	minions: {
 		camp: 'evil',
-		known: [
+		canSee: [
 			'morgana',
 			'assassin',
 			'mordred',
