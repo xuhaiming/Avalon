@@ -2,7 +2,7 @@
   <div class="login-page row">
     <div class="col s12 m6 offset-m3">
       <p class="flow-text">Your Name</p>
-      <input v-model="name" id="user_name" type="text" @keyup.enter="login" class="font-20">
+      <input v-model="name" id="user_name" type="text" @keyup.enter="login" autofocus>
       <div class="row">
         <button @click="login" class="btn-large col s12">Login</button>
       </div>

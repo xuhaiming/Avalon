@@ -1,7 +1,6 @@
 <template>
   <div id="room">
-      <h3>Your name: {{ this.user.name }}</h3>
-      <h2>{{ room.name }}</h2>
+      <p>User: <b>{{ this.user.name }}</b> - <b>{{ room. name }}</b></p>
       <div v-if="room.status === 'created'">
         <initial-page />
       </div>

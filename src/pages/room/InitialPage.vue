@@ -1,11 +1,17 @@
 <template>
-  <div>
-    <h4>Players</h4>
-    <div v-for="player in room.players">
-      <span>{{ player.name }}: </span>
-      <span>{{ getPlayerStatus(player.status) }}</span>
+  <div class="initial-game-page container">
+    <div class="row">
+      <ul class="collection with-header col s12">
+        <li class="collection-header"><b>Players</b></li>
+        <li class="collection-item" v-for="player in room.players">
+          {{ player.name }}:
+          <span class="pull-right">{{ getPlayerStatus(player.status) }}</span>  
+        </li>
+      </ul>
     </div>
-    <button @click="ready">ready</button>
+    <div class="row">
+      <button @click="ready" class="col s12 m6 offset-m3 btn">ready</button>    
+    </div>
   </div>
 </template>
 
@@ -39,3 +45,10 @@ export default {
   }
 }
 </script>
+<style>
+  .initial-game-page {
+    & li {
+      text-align: left;
+    }
+  }
+</style>
