@@ -96,9 +96,28 @@ io.on('connection', socket => {
         room.players[index].role = role
       })
 
-      room.status = 'started'
+      room.status = 'roleConfirmation'
     }
     
+    io.to(room.id).emit('room update', room)
+  })
+
+  socket.on('confirm role', data => {
+    let room = appData.rooms.find(room => room.id === data.roomId)
+    let user = room.players.find(player => player.name === data.username)
+
+    user.status = 'roleConfirmed'
+
+    if (_.every(room.players, { status: 'roleConfirmed' })) {
+      room.players = _.shuffle(room.players)
+      room.status = 'started'
+      room.gameStatus = {
+        rount: 1,
+        step: 'selection',
+        kingIndex: 0
+      }
+    }
+
     io.to(room.id).emit('room update', room)
   })
 })
