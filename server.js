@@ -115,6 +115,7 @@ io.on('connection', socket => {
         round: 1,
         step: 'selection',
         kingIndex: 0,
+        selectionConfirmed: false,
         missions: [
           {
             selectedPlayerNames: [],
@@ -129,11 +130,18 @@ io.on('connection', socket => {
 
   socket.on('select mission players', data => {
     let room = appData.rooms.find(room => room.id === data.roomId)
-    let user = room.players.find(player => player.name === data.username)
     const missionIndex = room.gameStatus.round - 1;
     let currentMission = room.gameStatus.missions[missionIndex]
 
     currentMission.selectedPlayerNames = data.selectedPlayerNames
+
+    io.to(room.id).emit('room update', room)
+  })
+
+  socket.on('update selection confirmation', data => {
+    let room = appData.rooms.find(room => room.id === data.roomId)
+
+    room.gameStatus.selectionConfirmed = data.selectionConfirmed
 
     io.to(room.id).emit('room update', room)
   })

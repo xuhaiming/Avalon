@@ -22,7 +22,7 @@ import RoleConfirmationPage from './RoleConfirmationPage.vue'
 import GamePage from './GamePage.vue'
 
 export default {
-  name: "roomPage",
+  name: 'roomPage',
   components: {
     InitialPage,
     RoleConfirmationPage,

@@ -38,7 +38,7 @@ import roles from '../../../rules/roles'
 import InitialPage from './InitialPage.vue'
 
 export default {
-  name: "roomRoleConfirmationPage",
+  name: 'roomRoleConfirmationPage',
   computed: mapState({
     io: 'io',
     user: 'user',

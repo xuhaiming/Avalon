@@ -19,7 +19,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: "roomInitialPage",
+  name: 'roomInitialPage',
   computed: mapState({
     io: 'io',
     user: 'user',
