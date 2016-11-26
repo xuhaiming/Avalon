@@ -8,6 +8,8 @@ import RoomListPage from './pages/roomList/RoomListPage.vue'
 import RoomPage from './pages/room/RoomPage.vue'
 import io from 'socket.io-client'
 
+import MaterializeCss from './styles/materialize.css'
+
 Vue.use(VueRouter)
 Vue.use(Vuex)
 

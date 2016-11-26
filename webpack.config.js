@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 require("babel-polyfill")
 
@@ -16,7 +17,11 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          // vue-loader options go here
+          loaders: {
+            css: ExtractTextPlugin.extract({
+              loader: 'css-loader'
+            })
+          }
         }
       },
       {
@@ -44,14 +49,21 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new ExtractTextPlugin("style.css"),
+    new webpack.LoaderOptionsPlugin({
+      vue: {
+        postcss: [
+          require('postcss-cssnext')()
+        ]
+      }
+    })
   ],
   devtool: '#eval-source-map'
 }
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'
-  // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
