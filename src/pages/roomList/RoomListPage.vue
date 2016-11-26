@@ -79,6 +79,7 @@ export default {
 
   & a {
     text-align: left;
+    cursor: pointer;
     
     & span {
       float: right
