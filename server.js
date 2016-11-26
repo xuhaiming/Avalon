@@ -112,11 +112,28 @@ io.on('connection', socket => {
       room.players = _.shuffle(room.players)
       room.status = 'started'
       room.gameStatus = {
-        rount: 1,
+        round: 1,
         step: 'selection',
-        kingIndex: 0
+        kingIndex: 0,
+        missions: [
+          {
+            selectedPlayerNames: [],
+            votes: []
+          }
+        ]
       }
     }
+
+    io.to(room.id).emit('room update', room)
+  })
+
+  socket.on('select mission players', data => {
+    let room = appData.rooms.find(room => room.id === data.roomId)
+    let user = room.players.find(player => player.name === data.username)
+    const missionIndex = room.gameStatus.round - 1;
+    let currentMission = room.gameStatus.missions[missionIndex]
+
+    currentMission.selectedPlayerNames = data.selectedPlayerNames
 
     io.to(room.id).emit('room update', room)
   })
