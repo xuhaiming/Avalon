@@ -1,12 +1,20 @@
 <template>
-  <div class="room-list-page">
-    <p>Your name: {{user.name}}</p>
-    <button @click="createRoom">Create Room</button>
-    <p>Rooms</p>
-    <div v-for="room in rooms.list">
-      <h3>{{ room.name }}</h3>
-      <button v-if="isNotInRoom(room)" @click="joinRoom(room)">Join</button>
-      <p v-for="player in room.players">{{ player.name }}</p>
+  <div class="room-list-page container">
+    <div class="row">
+      <div class="col s6">
+        <p>User: <b>{{user.name}}</b></p>
+      </div>
+      <div class="col s6">
+        <button @click="createRoom" class="btn">Create Room</button>
+      </div>
+    </div>
+    
+    <div class="collection with-header">
+      <h4 class="collection-header">All Rooms</h4>
+      <a class="collection-item" v-for="room in rooms.list" v-if="isNotInRoom(room)" @click="joinRoom(room)">
+        {{ room.name }}
+        <span>{{room.players.length}} {{ room.players.length > 1 ? 'persons' : 'person' }} in total</span>
+      </a>
     </div>
   </div>
 </template>
@@ -56,3 +64,19 @@ export default {
   }
 }
 </script>
+
+<style>
+.room-list-page{
+  & h4 {
+    margin: 0 0;
+  }
+
+  & a {
+    text-align: left;
+    
+    & span {
+      float: right
+    }
+  }
+}
+</style>

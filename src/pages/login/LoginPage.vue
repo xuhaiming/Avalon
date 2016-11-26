@@ -1,16 +1,16 @@
 <template>
-  <div class="login-page">
-    <p>Your name</p>
-    <input v-model="name" type="text" />
-    <button @click="login">Login</button>
-
-    <h3>Online players</h3>
-    <ul>
-      <li v-for="user in users.list">
-        {{ user.name }}
-      </li>
-    </ul>
-  </div>
+  <div class="login-page row">
+    <form class="col s12">
+      <div class="row">
+        <div class="input-field col s12">
+          <p class="flow-text">Your Name</p>
+          <input v-model="name" id="user_name" type="text" class="font-20">
+        </div>
+      </div>
+      <div class="row">
+        <button @click="login" class="btn-large col s12 m6 offset-m3">Login</button>
+      </div>
+    </form>
 </template>
 
 <script>
@@ -31,3 +31,14 @@ export default {
   }
 }
 </script>
+
+<style>
+.full-width {
+  width: 100%
+}
+.login-page {
+  & input[type=text] {
+    font-size: 1.25rem;
+  }
+}
+</style>
