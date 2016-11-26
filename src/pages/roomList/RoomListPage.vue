@@ -1,6 +1,6 @@
 <template>
   <div class="room-list-page container">
-    <div class="row">
+    <div class="row user-info">
       <div class="col s6">
         <p>User: <b>{{user.name}}</b></p>
       </div>
@@ -67,6 +67,12 @@ export default {
 
 <style>
 .room-list-page{
+  & .user-info {
+    & p {
+      text-align: left;
+    }
+  }
+
   & h4 {
     margin: 0 0;
   }

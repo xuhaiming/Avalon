@@ -32,9 +32,6 @@ export default {
 </script>
 
 <style>
-.full-width {
-  width: 100%
-}
 .login-page {
   & input[type=text] {
     font-size: 1.25rem;
