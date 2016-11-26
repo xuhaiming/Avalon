@@ -1,13 +1,11 @@
 <template>
   <div class="login-page row">
-    <div class="row col s12">
-      <div class="input-field col s12">
-        <p class="flow-text">Your Name</p>
-        <input v-model="name" id="user_name" type="text" @keyup.enter="login" class="font-20">
+    <div class="col s12 m6 offset-m3">
+      <p class="flow-text">Your Name</p>
+      <input v-model="name" id="user_name" type="text" @keyup.enter="login" class="font-20">
+      <div class="row">
+        <button @click="login" class="btn-large col s12">Login</button>
       </div>
-    </div>
-    <div class="row">
-      <button @click="login" class="btn-large col s12 m6 offset-m3">Login</button>
     </div>
   </div>
 </template>

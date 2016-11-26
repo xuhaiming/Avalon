@@ -60,4 +60,8 @@ h1, h2 {
 a {
   color: #42b983;
 }
+
+.pull-right {
+  text-align: right;
+}
 </style>

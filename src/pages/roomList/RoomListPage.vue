@@ -4,7 +4,7 @@
       <div class="col s6">
         <p>User: <b>{{user.name}}</b></p>
       </div>
-      <div class="col s6">
+      <div class="col s6 pull-right">
         <button @click="createRoom" class="btn">Create Room</button>
       </div>
     </div>
