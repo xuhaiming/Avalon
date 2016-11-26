@@ -57,13 +57,14 @@ export default {
       return statusMapping[status]
     },
     getRolesCanSee() {
-      const rolesCanSee = roles[this.currentUser.role].canSee
-      
+      const playersCanSee = this.getPlayersCanSee();
+      const rolesCanSee = _.map(playersCanSee, 'role');
+       
       return rolesCanSee;
     },
     getPlayersCanSee() {
       const players = this.room.players
-      const rolesCanSee = this.getRolesCanSee();
+      const rolesCanSee = roles[this.currentUser.role].canSee
       const playersCanSee = _.filter(players, player => _.includes(rolesCanSee, player.role))
 
       return playersCanSee
