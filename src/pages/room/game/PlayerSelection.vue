@@ -5,10 +5,7 @@
         <h5>You selected:</h5>
         <div v-for="selectedPlayerName in getSelectedPlayerNames()">{{ selectedPlayerName }}</div>
         <button class="btn" @click="changePlayers">Change</button>
-        <div>
-          <button class="btn" @click="acceptPlayers">Accept</button>
-          <button class="btn" @click="rejectPlayers">Reject</button>
-        </div>
+        <vote-mission-players />
       </div>
       <div v-else>
         <h5>Select {{ this.goMissionCount }} players for mission:</h5>
@@ -24,10 +21,7 @@
       <div v-if="room.gameStatus.selectionConfirmed">
         <div>{{ king.name }} has confirmed mission players:</div>
         <div v-for="selectedPlayerName in getSelectedPlayerNames()">{{ selectedPlayerName }}</div>
-        <div>
-          <button class="btn" @click="acceptPlayers">Accept</button>
-          <button class="btn" @click="rejectPlayers">Reject</button>
-        </div>
+        <vote-mission-players />
       </div>
 
       <div v-else>
@@ -41,6 +35,7 @@
 <script>
 import { mapState } from 'vuex'
 import missionsConfig from '../../../../rules/missions'
+import VoteMissionPlayers from './VoteMissionPlayers.vue'
 
 export default {
   name: 'gamePlayerSelection',
@@ -48,6 +43,9 @@ export default {
     return {
       selectedPlayers: []
     }
+  },
+  components: {
+    VoteMissionPlayers
   },
   computed: mapState({
     io: 'io',
@@ -79,12 +77,6 @@ export default {
         roomId: this.room.id,
         selectionConfirmed: false
       })
-    },
-    acceptPlayers() {
-
-    },
-    rejectPlayers() {
-      
     }
   },
   watch: {
