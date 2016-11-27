@@ -15,7 +15,7 @@
 <script>
 import { mapState } from 'vuex'
 import PlayerSelection from './game/PlayerSelection.vue'
-import VoteConfirmation form './game/VoteConfirmation.vue'
+import VoteConfirmation from './game/VoteConfirmation.vue'
 
 export default {
   name: 'roomGamePage',
