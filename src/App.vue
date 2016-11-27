@@ -1,7 +1,9 @@
 <template>
   <div id="app" class="container">
     <h1>{{title}}</h1>
-    <router-view></router-view>
+    <transition name="fade">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -27,10 +29,6 @@ export default {
   },
   methods: {
     initializeSocket() {
-      this.io.socket.on('user update', users => {
-        this.$store.dispatch('users_update', users)
-      })
-
       this.io.socket.on('rooms update', rooms => {
         this.$store.dispatch('rooms_update', rooms)
       })
@@ -68,4 +66,18 @@ a {
 .text-align-left {
   text-align: left;
 }
+
+.error{
+  font-size: 0.75rem;
+  color: #ef5350;
+}
+
+.fade-enter-active {
+  transition: opacity .5s
+}
+
+.fade-enter {
+  opacity: 0
+}
+
 </style>

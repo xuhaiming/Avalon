@@ -1,4 +1,5 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const webpack = require('webpack')
 const webpackMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleWare = require("webpack-hot-middleware")
@@ -9,6 +10,9 @@ const missions = require('./rules/missions')
 
 const app = express()
 const compiler = webpack(config)
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use(webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
@@ -33,19 +37,43 @@ app.get('/api/rooms', (req, res) => {
   res.send(appData.rooms)
 })
 
+app.post('/api/register', (req, res) => {
+  const newUser = {
+    username: req.body.username,
+    password: req.body.password
+  }
+  
+  appData.users.push(newUser)
+
+  res.send(newUser.username)
+})
+
+app.post('/api/login', (req, res) => {
+  const user = _.find(appData.users, {
+    username: req.body.username,
+    password: req.body.password
+  })
+
+  if(user) {
+    res.send({
+      status: 'ok',
+      username: user.username
+    })    
+  } else {
+    res.send({
+      status: 'error',
+      message:'username or password is not correct' 
+    });
+  }
+})
+
 io.on('connection', socket => {
   socket.emit('user update', appData.users)
 
-  socket.on('login', name => {
-    socket.username = name
-    appData.users.push({ name })
-    io.sockets.emit('user update', appData.users)
-  })
-
-  socket.on('disconnect', () => {
-    _.remove(appData.users, user => user.name === socket.username)
-    io.sockets.emit('user update', appData.users)
-  })
+  // socket.on('disconnect', () => {
+  //   _.remove(appData.users, user => user.name === socket.username)
+  //   io.sockets.emit('user update', appData.users)
+  // })
 
   socket.on('create room', (username, callback) => {
     const newRoom = {
