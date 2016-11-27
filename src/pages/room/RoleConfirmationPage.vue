@@ -16,10 +16,10 @@
     </div>
 
     <div class="row">
-      <ul class="collection with-header col s12">
+      <ul class="collection with-header col s12 text-align-left">
         <li class="collection-header"><b>Please confirm the info for you</b></li>
         <li class="collection-item" v-for="player in room.players">
-          {{ player.name }}:
+          {{ player.name }}
           <span class="pull-right">{{ getPlayerStatus(player.status) }}</span>  
         </li>
       </ul>
@@ -49,7 +49,7 @@ export default {
     getPlayerStatus(status) {
       const statusMapping = {
         joined: 'not ready',
-        ready: 'ready',
+        ready: 'wariting for confirm',
         offline: 'offline',
         roleConfirmed: 'confirmed'
       }
@@ -58,8 +58,8 @@ export default {
     },
     getRolesCanSee() {
       const playersCanSee = this.getPlayersCanSee();
-      const rolesCanSee = _.map(playersCanSee, 'role');
-       
+      const rolesCanSee = _.map(playersCanSee, 'role').join(", ");
+
       return rolesCanSee;
     },
     getPlayersCanSee() {
@@ -78,3 +78,10 @@ export default {
   }
 }
 </script>
+<style>
+  .role-confirmation-page{
+    & .text-align-left {
+      text-align: left;
+    }
+  }
+</style>

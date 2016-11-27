@@ -4,7 +4,7 @@
       <ul class="collection with-header col s12">
         <li class="collection-header"><b>Players</b></li>
         <li class="collection-item" v-for="player in room.players">
-          {{ player.name }}:
+          {{ player.name }}
           <span class="pull-right">{{ getPlayerStatus(player.status) }}</span>  
         </li>
       </ul>
