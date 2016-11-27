@@ -1,15 +1,17 @@
 <template>
-  <div class="login-page row">
+  <div class="register-page row">
     <div class="col s12 m6 offset-m3">
       <p class="flow-text text-align-left">Username</p>
       <input v-model="name" type="text" autofocus>
       <p class="flow-text text-align-left">Password</p>
-      <input v-model="password" type="text" @keyup.enter="login">
+      <input v-model="password" type="text">
+      <p class="flow-text text-align-left">Confirm Password</p>
+      <input v-model="password" type="text" @keyup.enter="register">
       
       <div class="row">
-        <button @click="login" class="btn-large col s12">Login</button>
+        <button @click="register" class="btn-large col s12">Login</button>
       </div>
-      <p>Don't have an account? Go <router-link to="register">Register</router-link></p>
+      <p>Already have an account? Go <router-link to="login">Login</router-link></p>
     </div>
   </div>
 </template>
@@ -18,13 +20,13 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: 'loginPage',
+  name: 'registerPage',
   computed: mapState([
     'io',
     'users'
   ]),
   methods: {
-    login() {
+    register() {
       this.io.socket.emit('login', this.name)
       this.$store.dispatch('user_setName', this.name)
       this.$router.push('/rooms')
@@ -34,7 +36,7 @@ export default {
 </script>
 
 <style>
-.login-page {
+.register-page {
   & input[type=text] {
     font-size: 1.25rem;
   }

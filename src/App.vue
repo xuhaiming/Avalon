@@ -64,4 +64,8 @@ a {
 .pull-right {
   float: right;
 }
+
+.text-align-left {
+  text-align: left;
+}
 </style>

@@ -78,10 +78,3 @@ export default {
   }
 }
 </script>
-<style>
-  .role-confirmation-page{
-    & .text-align-left {
-      text-align: left;
-    }
-  }
-</style>
