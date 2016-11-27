@@ -5,12 +5,17 @@
     <div v-if="room.gameStatus.step === 'selection'">
       <player-selection />
     </div>
+
+    <div v-if="room.gameStatus.step === 'voted'">
+      <vote-confirmation />
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import PlayerSelection from './game/PlayerSelection.vue'
+import VoteConfirmation form './game/VoteConfirmation.vue'
 
 export default {
   name: 'roomGamePage',
@@ -18,7 +23,8 @@ export default {
     room: state => state.room.current,
   }),
   components: {
-    PlayerSelection
+    PlayerSelection,
+    VoteConfirmation
   }
 }
 </script>

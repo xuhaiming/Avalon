@@ -160,6 +160,10 @@ io.on('connection', socket => {
       accept: data.accept
     })
 
+    if (currentMission.votes.length === room.players.length) {
+      room.gameStatus.step = 'voted'
+    }
+
     io.to(room.id).emit('room update', room)
   })
 })
