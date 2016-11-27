@@ -1,7 +1,16 @@
 <template>
   <div>
     <div v-if="king.name === this.user.name">
-      <div v-if="!room.gameStatus.selectionConfirmed">
+      <div v-if="room.gameStatus.selectionConfirmed">
+        <h5>You selected:</h5>
+        <div v-for="selectedPlayerName in getSelectedPlayerNames()">{{ selectedPlayerName }}</div>
+        <button class="btn" @click="changePlayers">Change</button>
+        <div>
+          <button class="btn" @click="acceptPlayers">Accept</button>
+          <button class="btn" @click="rejectPlayers">Reject</button>
+        </div>
+      </div>
+      <div v-else>
         <h5>Select {{ this.goMissionCount }} players for mission:</h5>
         <div v-if="!room.gameStatus.selectionConfirmed" v-for="player in room.players">
             <input type="checkbox" :id="`player_${player.name}`" :value="player.name" v-model="selectedPlayers">
@@ -9,17 +18,22 @@
         </div>
         <button v-if="this.selectedPlayers.length === this.goMissionCount" class="btn" @click="confirmPlayers">Confirm</button>
       </div>
-      <div v-else>
-        <h5>You selected:</h5>
-        <div v-for="selectedPlayerName in getSelectedPlayerNames()">{{ selectedPlayerName }}</div>
-        <button class="btn" @click="changePlayers">Change</button>
-      </div>
     </div>
 
     <div v-else>
-      <div v-if="room.gameStatus.selectionConfirmed">{{ king.name }} has confirmed mission players:</div>
-      <div v-else>{{ king.name }} is selecting mission players...</div>
-      <div v-for="selectedPlayerName in getSelectedPlayerNames()">{{ selectedPlayerName }}</div>
+      <div v-if="room.gameStatus.selectionConfirmed">
+        <div>{{ king.name }} has confirmed mission players:</div>
+        <div v-for="selectedPlayerName in getSelectedPlayerNames()">{{ selectedPlayerName }}</div>
+        <div>
+          <button class="btn" @click="acceptPlayers">Accept</button>
+          <button class="btn" @click="rejectPlayers">Reject</button>
+        </div>
+      </div>
+
+      <div v-else>
+        <div>{{ king.name }} is selecting mission players...</div>
+        <div v-for="selectedPlayerName in getSelectedPlayerNames()">{{ selectedPlayerName }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -65,6 +79,12 @@ export default {
         roomId: this.room.id,
         selectionConfirmed: false
       })
+    },
+    acceptPlayers() {
+
+    },
+    rejectPlayers() {
+      
     }
   },
   watch: {
