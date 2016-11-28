@@ -11,8 +11,8 @@ const missions = require('./rules/missions')
 const app = express()
 const compiler = webpack(config)
 
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
@@ -38,42 +38,39 @@ app.get('/api/rooms', (req, res) => {
 })
 
 app.post('/api/register', (req, res) => {
-  const newUser = {
-    username: req.body.username,
-    password: req.body.password
+  const existUser = _.find(appData.users, { username: req.body.username })
+
+  if (existUser) {
+    return res.status(400).send({ error: 'User existed.' })
   }
-  
-  appData.users.push(newUser)
 
-  res.send(newUser.username)
-})
-
-app.post('/api/login', (req, res) => {
-  const user = _.find(appData.users, {
+  appData.users.push({
     username: req.body.username,
     password: req.body.password
   })
 
-  if(user) {
-    res.send({
-      status: 'ok',
-      username: user.username
-    })    
-  } else {
-    res.send({
-      status: 'error',
-      message:'username or password is not correct' 
-    });
-  }
+  return res.send(req.body.username)
 })
 
 io.on('connection', socket => {
-  socket.emit('user update', appData.users)
+  socket.on('login', (data, callback) => {
+    const user = _.find(appData.users, {
+      username: data.username,
+      password: data.password
+    })
 
-  // socket.on('disconnect', () => {
-  //   _.remove(appData.users, user => user.name === socket.username)
-  //   io.sockets.emit('user update', appData.users)
-  // })
+    if (user) {
+      const inProgressRoom = _.find(appData.rooms, room => _.find(room.players, { name: data.username }))
+
+      if (inProgressRoom) {
+        socket.join(inProgressRoom.id)
+      }
+
+      return callback({ username: user.username })    
+    }
+
+    return callback({ error:'Incorrect username or password' })
+  })
 
   socket.on('create room', (username, callback) => {
     const newRoom = {

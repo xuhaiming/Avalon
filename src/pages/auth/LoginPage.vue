@@ -1,7 +1,7 @@
 <template>
   <div class="login-page row">
     <div class="col s12 m6 offset-m3">
-      <p v-if="loginError" class="error">{{ errorMessage }}</p>
+      <p v-if="showError" class="error">Username or password is not correct</p>
       <p class="flow-text text-align-left">Username</p>
       <input v-model="username" type="text" autofocus>
       <p class="flow-text text-align-left">Password</p>
@@ -18,32 +18,46 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
+import _ from 'lodash'
 
 export default {
   name: 'loginPage',
   data() {
     return {
-      loginError: false,
-      errorMessage: ''
+      showError: false
     }
   },
   computed: mapState([
     'io'
   ]),
   methods: {
+    navigateAfterLogin() {
+      axios.get('/api/rooms')
+        .then(response => {
+          const rooms = response.data
+          this.$store.dispatch('rooms_update', rooms)
+
+          const inProgressRoom = _.find(rooms, room => _.find(room.players, { name: this.username }))
+
+          if (inProgressRoom) {
+            this.$store.dispatch('room_setCurrent', inProgressRoom)
+            this.$router.push(`/rooms/${inProgressRoom.id}`)
+          } else {
+            this.$router.push(`/rooms`)
+          }
+        })
+    },
     login() {
-      if(this.username && this.password) {
-        axios.post('/api/login', {
+      if (this.username && this.password) {
+        this.io.socket.emit('login', {
           username: this.username,
           password: this.password
-        })
-        .then(response => {
-          if(response.data.status === 'ok') {
-            this.$store.dispatch('user_setName', response.data.username)
-            this.$router.push('/rooms')
+        }, response => {
+          if (response.username) {
+            this.$store.dispatch('user_setName', response.username)
+            this.navigateAfterLogin()
           } else {
-            this.loginError = true
-            this.errorMessage = response.data.message
+            this.showError = true
           }
         })
       }

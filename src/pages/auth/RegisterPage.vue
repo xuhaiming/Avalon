@@ -7,7 +7,7 @@
       <input v-model="password" type="password">
       <p class="flow-text text-align-left">
         Confirm Password 
-        <span v-if="isNotMatch" class="error">Doesn't match your password</span>
+        <span v-if="passwordNotMatch" class="error">Doesn't match your password</span>
         </p>
       <input 
         v-model="passwordToConfirm"
@@ -15,6 +15,10 @@
         @keyup="checkPassword" 
         @keyup.enter="register">
       
+      <div v-if="showError" class="row error">
+        <div>This user has already been registered.</div>
+      </div>
+
       <div class="row">
         <button @click="register" class="btn-large col s12">REGISTER</button>
       </div>
@@ -31,7 +35,8 @@ export default {
   name: 'registerPage',
   data() {
     return {
-      isNotMatch: false
+      passwordNotMatch: false,
+      showError: false
     }
   },
   computed: mapState([
@@ -39,7 +44,7 @@ export default {
   ]),
   methods: {
     register() {
-      if(this.username && this.password && !this.isNotMatch) {
+      if(this.username && this.password && !this.passwordNotMatch) {
         axios.post('/api/register', {
           username: this.username,
           password: this.password
@@ -48,10 +53,13 @@ export default {
           this.$store.dispatch('user_setName', response.data)
           this.$router.push('/rooms')
         })
+        .catch(error => {
+          this.showError = true
+        })
       }
     },
     checkPassword() {
-      this.isNotMatch = this.password != this.passwordToConfirm;
+      this.passwordNotMatch = this.password != this.passwordToConfirm;
     }
   }
 }

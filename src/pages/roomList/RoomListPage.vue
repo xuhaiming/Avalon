@@ -34,7 +34,9 @@ export default {
   created() {
     if (!this.user.name) {
       this.$router.push('/login')
-    } else {
+    } 
+
+    if (this.rooms.list.length === 0) {
       this.getRooms()
     }
   },
