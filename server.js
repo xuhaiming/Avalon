@@ -196,8 +196,6 @@ io.on('connection', socket => {
         }))
 
         room.kingIndex++
-        currentMission.selectedPlayerNames = []
-        currentMission.votes = []
       }
     }
 
@@ -215,6 +213,8 @@ io.on('connection', socket => {
     if (_.every(room.players, { status: 'voteConfirmed' })) {
       if (_.filter(currentMission.votes, { accept: false }).length * 100 / room.players.length >= 50 ) {
         room.gameStatus.step = 'selection'
+        currentMission.selectedPlayerNames = []
+        currentMission.votes = []
       } else {
         room.gameStatus.step = 'goMission'
       }

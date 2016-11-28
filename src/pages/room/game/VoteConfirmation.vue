@@ -11,7 +11,7 @@
       <h5>Players voted reject: </h5>
       <div v-for="vote in getRejectedVotes()">{{ vote.name }}</div>
     </div>
-    <h4 v-if="isVoteRejected()">Change <b>{{ room.players[getCurrentMission().kingIndex].name }}</b> to select mission players</h4>
+    <h4 v-if="isVoteRejected()">Change <b>{{ room.players[room.gameStatus.kingIndex].name }}</b> to select mission players</h4>
     <h4 v-else>Go mission!</h4>
     <h5 v-if="confirmed()">Waiting for others to confirm...</h5>
     <button v-else class="btn" @click="confirmVoteResult">OK</button>
