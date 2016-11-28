@@ -195,7 +195,7 @@ io.on('connection', socket => {
           votes: currentMission.votes
         }))
 
-        room.kingIndex++
+        room.kingIndex = room.kingIndex === room.players.length - 1 ? 0 : room.kingIndex + 1
       }
     }
 
@@ -215,6 +215,9 @@ io.on('connection', socket => {
         room.gameStatus.step = 'selection'
         currentMission.selectedPlayerNames = []
         currentMission.votes = []
+        room.gameStatus.selectionConfirmed = false
+
+        room.players.forEach(player => player.status = 'selecting')
       } else {
         room.gameStatus.step = 'goMission'
       }
@@ -225,6 +228,19 @@ io.on('connection', socket => {
 
   socket.on('go mission', data => {
     let room = appData.rooms.find(room => room.id === data.roomId)
+    const missionIndex = room.gameStatus.round - 1;
+    let currentMission = room.gameStatus.missions[missionIndex]
+
+    currentMission.results.push({
+      name: data.username,
+      success: data.success
+    })
+
+    io.to(room.id).emit('room update', room)
+  })
+
+  socket.on('confirm mission result', data => {
+    
   })
 })
 

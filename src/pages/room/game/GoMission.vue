@@ -6,9 +6,9 @@
         <span>{{ missionPlayerName }}</span>
         <span>{{ !getMissionPlayerVote(missionPlayerName) ? 'waiting' : 'done' }}</span>
       </div>
-      <div v-if="isSelectedPlayer()">
-        <button class="btn">Success</button>
-        <button class="btn">Destroy</button>
+      <div v-if="isSelectedPlayer() && !getMissionPlayerVote(user.name)">
+        <button class="btn" @click="supportMission">Success</button>
+        <button class="btn" @click="destroyMission">Destroy</button>
       </div>
   </div>
 </template>
@@ -35,6 +35,20 @@ export default {
     },
     isSelectedPlayer() {
       return _.find(this.getCurrentMission().selectedPlayerNames, name => name === this.user.name)
+    },
+    supportMission() {
+      this.io.socket.emit('go mission', {
+        roomId: this.room.id,
+        username: this.user.name,
+        success: true
+      })
+    },
+    destroyMission() {
+      this.io.socket.emit('go mission', {
+        roomId: this.room.id,
+        username: this.user.name,
+        success: false
+      })
     }
   }
 }
