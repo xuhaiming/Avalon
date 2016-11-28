@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-if="king.name === this.user.name">
+  <div class="player-selection-page">
+    <div v-if="isKing(this.user.name)">
       <div v-if="room.gameStatus.selectionConfirmed">
         <h5>You selected:</h5>
         <div v-for="selectedPlayerName in getSelectedPlayerNames()">{{ selectedPlayerName }}</div>
@@ -8,11 +8,27 @@
         <vote-mission-players />
       </div>
       <div v-else>
-        <h5>Select {{ this.goMissionCount }} players for mission:</h5>
-        <div v-if="!room.gameStatus.selectionConfirmed" v-for="player in room.players">
-            <input type="checkbox" :id="`player_${player.name}`" :value="player.name" v-model="selectedPlayers">
-            <label :for="`player_${player.name}`">{{ player.name }}</label>
-        </div>
+        <p class="flow-text">Select {{ this.goMissionCount }} players for mission:</p>
+        <table v-if="!room.gameStatus.selectionConfirmed" class="centered striped">
+          <thead>
+            <tr>
+                <th data-field="position">Position</th>
+                <th data-field="player_name">Player</th>
+                <th data-field="action">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(player, index) in room.players" :class="{ 'king-highlight' : isKing(player.name) }">
+              <td>{{ index + 1 }}</td>
+              <td>{{ player.name }}</td>
+              <td>
+                <input type="checkbox" :id="`player_${player.name}`" :value="player.name" v-model="selectedPlayers">
+                <label :for="`player_${player.name}`"></label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
         <button v-if="this.selectedPlayers.length === this.goMissionCount" class="btn" @click="confirmPlayers">Confirm</button>
       </div>
     </div>
@@ -25,8 +41,14 @@
       </div>
 
       <div v-else>
-        <div>{{ king.name }} is selecting mission players...</div>
-        <div v-for="selectedPlayerName in getSelectedPlayerNames()">{{ selectedPlayerName }}</div>
+        <ul class="collection with-header flow-text ">
+          <li class="collection-header">
+            <b>{{ king.name }}</b> is selecting mission players...
+          </li>
+          <li class="collection-item" v-for="selectedPlayerName in getSelectedPlayerNames()">
+            {{ selectedPlayerName }}
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -77,6 +99,9 @@ export default {
         roomId: this.room.id,
         selectionConfirmed: false
       })
+    },
+    isKing(name) {
+      return this.king.name === name
     }
   },
   watch: {
@@ -93,3 +118,25 @@ export default {
   }
 }
 </script>
+
+<style>
+.player-selection-page {
+  & input[type="checkbox"]:checked + label:before {
+    width: 15px;
+    heigth: 25px;
+  }
+
+  & input[type="checkbox"] + label:before {
+    width: 25px;
+    height: 25px;
+  }
+
+  & td {
+    font-size: 1.25rem
+  }
+
+  & .king-highlight {
+    color: #e65100
+  }
+}
+</style>
