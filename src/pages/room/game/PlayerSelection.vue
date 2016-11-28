@@ -1,55 +1,39 @@
 <template>
-  <div class="player-selection-page">
-    <div v-if="isKing(this.user.name)">
-      <div v-if="room.gameStatus.selectionConfirmed">
-        <h5>You selected:</h5>
-        <div v-for="selectedPlayerName in getSelectedPlayerNames()">{{ selectedPlayerName }}</div>
-        <button class="btn" @click="changePlayers">Change</button>
-        <vote-mission-players />
-      </div>
-      <div v-else>
-        <p class="flow-text">Select {{ this.goMissionCount }} players for mission:</p>
-        <table v-if="!room.gameStatus.selectionConfirmed" class="centered striped">
-          <thead>
-            <tr>
-                <th data-field="position">Position</th>
-                <th data-field="player_name">Player</th>
-                <th data-field="action">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(player, index) in room.players" :class="{ 'king-highlight' : isKing(player.name) }">
-              <td>{{ index + 1 }}</td>
-              <td>{{ player.name }}</td>
-              <td>
-                <input type="checkbox" :id="`player_${player.name}`" :value="player.name" v-model="selectedPlayers">
-                <label :for="`player_${player.name}`"></label>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <br>
-        <button v-if="this.selectedPlayers.length === this.goMissionCount" class="btn" @click="confirmPlayers">Confirm</button>
-      </div>
-    </div>
-
-    <div v-else>
-      <div v-if="room.gameStatus.selectionConfirmed">
-        <div>{{ king.name }} has confirmed mission players:</div>
-        <div v-for="selectedPlayerName in getSelectedPlayerNames()">{{ selectedPlayerName }}</div>
-        <vote-mission-players />
-      </div>
-
-      <div v-else>
-        <ul class="collection with-header flow-text ">
-          <li class="collection-header">
-            <b>{{ king.name }}</b> is selecting mission players...
-          </li>
-          <li class="collection-item" v-for="selectedPlayerName in getSelectedPlayerNames()">
-            {{ selectedPlayerName }}
-          </li>
-        </ul>
-      </div>
+  <div class="player-selection-page container">
+    <table class="centered striped">
+      <thead>
+        <tr>
+            <th data-field="position">Position</th>
+            <th data-field="player_name">Player</th>
+            <th data-field="action" v-if="isKing(user.name) && !room.gameStatus.selectionConfirmed">Action</th>
+            <th data-field="status" v-else>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(player, index) in room.players" :class="{ 'voted-highlight' : getPlayerVoteInfo(player.name) }">
+          <td>{{ index + 1 }} {{ isKing(player.name) ? 'Lead': '' }}</td>
+          <td>{{ player.name }}</td>
+          <td v-if="isKing(user.name) && !room.gameStatus.selectionConfirmed">
+            <input type="checkbox" :id="`player_${player.name}`" :value="player.name" v-model="selectedPlayers">
+            <label :for="`player_${player.name}`"></label>
+          </td>
+          <td v-else>
+            <span v-if="isPlayerSelected(player.name)">selected</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <button 
+      v-if="this.selectedPlayers.length === this.goMissionCount && !room.gameStatus.selectionConfirmed && isKing(user.name)" 
+      class="btn" 
+      @click="confirmPlayers">
+        Confirm
+    </button>
+    <div v-if="room.gameStatus.selectionConfirmed">
+      <button v-if="isKing(user.name)" class="btn" @click="changePlayers">Change</button>
+      <button v-if="!getPlayerVoteInfo(user.name)" class="btn" @click="acceptPlayers">Accept</button>
+      <button v-if="!getPlayerVoteInfo(user.name)" class="btn" @click="rejectPlayers">Reject</button>
     </div>
   </div>
 </template>
@@ -88,6 +72,11 @@ export default {
 
       return currentMission.selectedPlayerNames
     },
+    isPlayerSelected(name) {
+      const selectedPlayerNames = this.getSelectedPlayerNames();
+
+      return _.indexOf(selectedPlayerNames, name) > -1;
+    },
     confirmPlayers() {
       this.io.socket.emit('update selection confirmation', {
         roomId: this.room.id,
@@ -99,6 +88,28 @@ export default {
         roomId: this.room.id,
         selectionConfirmed: false
       })
+    },
+    acceptPlayers() {
+      this.io.socket.emit('vote', {
+        roomId: this.room.id,
+        username: this.user.name,
+        accept: true
+      })
+    },
+    rejectPlayers() {
+      this.io.socket.emit('vote', {
+        roomId: this.room.id,
+        username: this.user.name,
+        accept: false
+      })
+    },
+    getCurrentMissionVotes() {
+      const missionIndex = this.room.gameStatus.round - 1;
+
+      return this.room.gameStatus.missions[missionIndex].votes
+    },
+    getPlayerVoteInfo(name) {
+      return _.find(this.getCurrentMissionVotes(), { name })
     },
     isKing(name) {
       return this.king.name === name
@@ -135,8 +146,8 @@ export default {
     font-size: 1.25rem
   }
 
-  & .king-highlight {
-    color: #e65100
+  & .voted-highlight {
+    color: #26a69a
   }
 }
 </style>
