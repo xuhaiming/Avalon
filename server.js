@@ -144,7 +144,8 @@ io.on('connection', socket => {
         missions: [
           {
             selectedPlayerNames: [],
-            votes: []
+            votes: [],
+            results: []
           }
         ],
         history: []
@@ -187,6 +188,36 @@ io.on('connection', socket => {
 
     if (currentMission.votes.length === room.players.length) {
       room.gameStatus.step = 'voted'
+      room.gameStatus.history.push(Object.assign({}, {
+        selectedPlayerNames: currentMission.selectedPlayerNames,
+        votes: currentMission.votes
+      }))
+
+      if (_.filter(currentMission.votes, { accept: false }).length * 100 / room.players.length >= 50 ) {
+        room.kingIndex++
+        currentMission.selectedPlayerNames = []
+      }
+
+      currentMission.votes = []
+    }
+
+    io.to(room.id).emit('room update', room)
+  })
+
+  socket.on('vote confirm', data => {
+    let room = appData.rooms.find(room => room.id === data.roomId)
+    let user = room.players.find(player => player.name === data.username)
+    const missionIndex = room.gameStatus.round - 1;
+    let currentMission = room.gameStatus.missions[missionIndex]
+
+    user.status = 'voteConfirmed'
+
+    if (_.every(room.players, { status: 'voteConfirmed' })) {
+      if (_.filter(currentMission.votes, { accept: false }).length * 100 / room.players.length >= 50 ) {
+        currentMission.step = 'selection'
+      } else {
+        currentMission.step = 'goMission'
+      }
     }
 
     io.to(room.id).emit('room update', room)
