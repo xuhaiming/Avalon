@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h4>Game</h4>
-
     <div v-if="room.gameStatus.step === 'selection'">
       <player-selection />
     </div>

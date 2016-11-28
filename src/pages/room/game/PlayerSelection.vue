@@ -3,10 +3,10 @@
     <table class="centered striped">
       <thead>
         <tr>
-            <th data-field="position">Position</th>
-            <th data-field="player_name">Player</th>
-            <th data-field="action" v-if="isKing(user.name) && !room.gameStatus.selectionConfirmed">Action</th>
-            <th data-field="status" v-else>Status</th>
+          <th data-field="position">Position</th>
+          <th data-field="player_name">Player</th>
+          <th data-field="action" v-if="isKing(user.name) && !room.gameStatus.selectionConfirmed">Action</th>
+          <th data-field="status" v-else>Status</th>
         </tr>
       </thead>
       <tbody>
