@@ -1,18 +1,20 @@
 <template>
-  <div>
+  <div class="vote-mission-players-page container flow-text">
     <div v-if="getCurrentUserVote()">
-      <div>You have {{ getCurrentUserVote().accept ? 'accepted' : 'rejected' }}</div>
+      <p>You have {{ getCurrentUserVote().accept ? 'accepted' : 'rejected' }}</p>
     </div>
     <div v-else>
       <button class="btn" @click="acceptPlayers">Accept</button>
       <button class="btn" @click="rejectPlayers">Reject</button>
     </div>
 
-    <div v-for="player in room.players">
-      <span>{{ player.name }}</span>
-      <span v-if="getPlayerVoteInfo(player.name)">Voted</span>
-      <span v-else>Waiting for vote</span>
-    </div>
+    <ul v-for="player in room.players" class="collection">
+      <li class="collection-item text-align-left">
+        <span>{{ player.name }}</span>
+        <span v-if="getPlayerVoteInfo(player.name)" class="pull-right">Voted</span>
+        <span v-else class="pull-right">Waiting for vote</span>
+      </li>
+    </ul>
   </div>
 </template>
 
