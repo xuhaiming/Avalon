@@ -11,9 +11,12 @@
         <button class="btn" @click="goMission(false)">Destroy</button>
       </div>
       <div v-if="allMissionPlayersVoted()">
-        <h4>Result: <b></b></h4>
+        <h4>Result: <b>{{ isMissionSucceed() ? 'success' : 'failed'}}</b></h4>
         <div>Success: {{ getMissionResultCount(true) }}</div>
         <div>Fail: {{ getMissionResultCount(false) }}</div>
+
+        <h5 v-if="hasConfirmedMissionResult()">Waiting for other players to confirm...</h5>
+        <button v-else class="btn" @click="confirmMissionResult">OK</button>
       </div>
   </div>
 </template>
@@ -21,6 +24,7 @@
 <script>
 import { mapState } from 'vuex'
 import _ from 'lodash'
+import gameLogic from '../../../../rules/gameLogic'
 
 export default {
   name: 'gameGoMission',
@@ -47,12 +51,24 @@ export default {
     getMissionResultCount(success) {
       return _.filter(this.getCurrentMission().results, { success }).length
     },
+    isMissionSucceed() {
+      return gameLogic.isMissionSucceed(this.getCurrentMission().results, this.room.players.length, this.room.gameStatus.round)
+    },
     goMission(success) {
       this.io.socket.emit('go mission', {
         roomId: this.room.id,
         username: this.user.name,
         success
       })
+    },
+    confirmMissionResult() {
+      this.io.socket.emit('confirm mission result', {
+        roomId: this.room.id,
+        username: this.user.name
+      })
+    },
+    hasConfirmedMissionResult() {
+      return _.find(this.room.players, { name: this.user.name }).status === 'missionResultConfirmed'
     }
   }
 }

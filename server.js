@@ -7,6 +7,7 @@ const config = require('./webpack.config')
 const _ = require('lodash')
 const shortid = require('shortid')
 const missions = require('./rules/missions')
+const gameLogic = require('./rules/gameLogic')
 
 const app = express()
 const compiler = webpack(config)
@@ -113,7 +114,7 @@ io.on('connection', socket => {
 
     user.status = 'ready'
 
-    if (_.every(room.players, { status: 'ready'}) && room.players.length >= 5) {
+    if (_.every(room.players, { status: 'ready'}) && room.players.length >= 5 && room.players.length <= 10) {
       const roles = _.find(missions, { totalCount: room.players.length }).roles
       const shuffledRoles = _.shuffle(roles)
 
@@ -188,15 +189,6 @@ io.on('connection', socket => {
 
     if (currentMission.votes.length === room.players.length) {
       room.gameStatus.step = 'voted'
-
-      if (_.filter(currentMission.votes, { accept: false }).length * 100 / room.players.length >= 50 ) {
-        room.gameStatus.history.push(Object.assign({}, {
-          selectedPlayerNames: currentMission.selectedPlayerNames,
-          votes: currentMission.votes
-        }))
-
-        room.kingIndex = room.kingIndex === room.players.length - 1 ? 0 : room.kingIndex + 1
-      }
     }
 
     io.to(room.id).emit('room update', room)
@@ -211,11 +203,18 @@ io.on('connection', socket => {
     user.status = 'voteConfirmed'
 
     if (_.every(room.players, { status: 'voteConfirmed' })) {
-      if (_.filter(currentMission.votes, { accept: false }).length * 100 / room.players.length >= 50 ) {
+      if (gameLogic.isVoteRejected(currentMission.votes, room.players.length)) {
+        room.gameStatus.history.push(Object.assign({}, {
+          round: room.gameStatus.round,
+          selectedPlayerNames: currentMission.selectedPlayerNames,
+          votes: currentMission.votes
+        }))
+
         room.gameStatus.step = 'selection'
         currentMission.selectedPlayerNames = []
         currentMission.votes = []
         room.gameStatus.selectionConfirmed = false
+        room.gameStatus.kingIndex = gameLogic.getNextKingIndex(room.gameStatus.kingIndex, room.players.length)
 
         room.players.forEach(player => player.status = 'selecting')
       } else {
@@ -240,7 +239,36 @@ io.on('connection', socket => {
   })
 
   socket.on('confirm mission result', data => {
-    
+    let room = appData.rooms.find(room => room.id === data.roomId)
+    let user = room.players.find(player => player.name === data.username)
+    const missionIndex = room.gameStatus.round - 1;
+    let currentMission = room.gameStatus.missions[missionIndex]
+
+    user.status = 'missionResultConfirmed'
+
+    if (_.every(room.players, { status: 'missionResultConfirmed' })) {
+      room.gameStatus.history.push(Object.assign({}, {
+        round: room.gameStatus.round,
+        selectedPlayerNames: currentMission.selectedPlayerNames,
+        votes: currentMission.votes,
+        results: currentMission.results
+      }))
+
+      room.gameStatus.round++
+      room.gameStatus.step = 'selection'
+      room.gameStatus.selectionConfirmed = false
+      room.gameStatus.kingIndex = gameLogic.getNextKingIndex(room.gameStatus.kingIndex, room.players.length)
+
+      room.players.forEach(player => player.status = 'selecting')
+
+      room.gameStatus.missions.push({
+        selectedPlayerNames: [],
+        votes: [],
+        results: []
+      })
+    }
+
+    io.to(room.id).emit('room update', room)
   })
 })
 

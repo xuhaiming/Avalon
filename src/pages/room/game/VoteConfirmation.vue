@@ -11,7 +11,7 @@
       <h5>Players voted reject: </h5>
       <div v-for="vote in getRejectedVotes()">{{ vote.name }}</div>
     </div>
-    <h4 v-if="isVoteRejected()">Change <b>{{ room.players[room.gameStatus.kingIndex].name }}</b> to select mission players</h4>
+    <h4 v-if="isVoteRejected()">Change <b>{{ room.players[getNextKingIndex()].name }}</b> to select mission players</h4>
     <h4 v-else>Go mission!</h4>
     <h5 v-if="confirmed()">Waiting for others to confirm...</h5>
     <button v-else class="btn" @click="confirmVoteResult">OK</button>
@@ -21,6 +21,7 @@
 <script>
 import { mapState } from 'vuex'
 import _ from 'lodash'
+import gameLogic from '../../../../rules/gameLogic'
 
 export default {
   name: 'gameVoteConfirmation',
@@ -42,7 +43,10 @@ export default {
       return _.filter(this.getCurrentMission().votes, { accept: false })
     },
     isVoteRejected() {
-      return this.getRejectedVotes().length * 100 / this.room.players.length >= 50 
+      return gameLogic.isVoteRejected(this.getCurrentMission().votes, this.room.players.length) 
+    },
+    getNextKingIndex() {
+      return gameLogic.getNextKingIndex(this.room.gameStatus.kingIndex, this.room.players.length)
     },
     confirmed() {
       return _.find(this.room.players, { name: this.user.name }).status === 'voteConfirmed'
