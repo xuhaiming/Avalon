@@ -37,10 +37,10 @@
     </button>
     <div v-if="room.gameStatus.selectionConfirmed">
       <button v-if="isKing(user.name)" class="btn" @click="changePlayers">Change</button>
-      <button v-if="!getPlayerVoteInfo(user.name)" class="btn" @click="acceptPlayers">
+      <button v-if="!getPlayerVoteInfo(user.name)" class="btn vote-button" @click="acceptPlayers">
         <img class="mission-player z-depth-3 circle responsive-img" src="approve.jpg">
       </button>
-      <button v-if="!getPlayerVoteInfo(user.name)" class="btn" @click="rejectPlayers">
+      <button v-if="!getPlayerVoteInfo(user.name)" class="btn vote-button" @click="rejectPlayers">
         <img class="mission-player z-depth-3 circle responsive-img" src="reject.jpg">
       </button>
     </div>
@@ -166,6 +166,21 @@ export default {
   & .king {
     width: 2rem;
     border-radius: 0.3rem;
+  }
+
+  & .vote-button {
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+
+    &:hover, &:active {
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    & img {
+      width: 35px;
+    }
   }
 }
 </style>
