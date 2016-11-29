@@ -4,6 +4,7 @@
       <p class="col s12 text-float">
         You are <b>{{ currentUser.role }}</b>
       </p>
+      <img class="z-depth-4 circle responsive-img" :src="`role-${currentUser.role}.jpg`">
     </div>
 
     <div class="row" v-if="getPlayersCanSee().length != 0">

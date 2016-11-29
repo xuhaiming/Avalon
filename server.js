@@ -22,6 +22,8 @@ app.use(webpackMiddleware(compiler, {
 
 app.use(webpackHotMiddleWare(compiler))
 
+app.use(express.static('src/assets'))
+
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 
