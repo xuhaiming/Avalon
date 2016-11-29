@@ -45,10 +45,11 @@ export default {
   }
 }
 </script>
+
 <style>
-  .initial-game-page {
-    & li {
-      text-align: left;
-    }
+.initial-game-page {
+  & li {
+    text-align: left;
   }
+}
 </style>

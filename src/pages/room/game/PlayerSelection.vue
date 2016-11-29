@@ -165,7 +165,7 @@ export default {
 
   & .king {
     width: 2rem;
-    border-radius: 0.2rem;
+    border-radius: 0.3rem;
   }
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <round-status />
     <div v-if="room.gameStatus.step === 'selection'">
       <player-selection />
     </div>
@@ -16,6 +17,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import RoundStatus from './game/RoundStatus.vue'
 import PlayerSelection from './game/PlayerSelection.vue'
 import VoteConfirmation from './game/VoteConfirmation.vue'
 import GoMission from './game/GoMission.vue'
@@ -26,6 +28,7 @@ export default {
     room: state => state.room.current,
   }),
   components: {
+    RoundStatus,
     PlayerSelection,
     VoteConfirmation,
     GoMission
