@@ -1,11 +1,17 @@
 <template>
-  <div>
-    <h4>Kill Merlin</h4>
-    <div v-for="player in getJusticePlayers()">
-      <span>{{ player.name }}</span>
-      <button class="btn" @click="killMerlin(player.name)">Kill</button>
-    </div>
-    <button class="btn" @click="confirmKillMerlin()">Confirm</button>
+  <div class="kill-merlin-page container">
+    <ul class="collection with-header flow-text text-align-left">
+      <li class="collection-header text-big"><b>Kill Merlin</b></li>
+      <li v-if="isAssassin(user.name)" class="collection-item" v-for="player in getJusticePlayers()">
+        {{ player.name }}
+        <button class="btn pull-right" @click="killMerlin(player.name)">Kill</button>
+      </li>
+      <li v-else class="collection-item" v-for="player in getJusticePlayers()">
+        {{ player.name }}
+        <button v-if="isKilled(player.name)" class="btn pull-right">oh no</button>
+      </li>
+    </ul>
+    <button v-if="isAssassin(user.name)" class="btn" @click="confirmKillMerlin()">Confirm</button>
   </div>
 </template>
 
@@ -17,11 +23,20 @@ export default {
   name: 'gameKillMerlin',
   computed: mapState({
     room: state => state.room.current,
-    io: 'io'
+    io: 'io',
+    user: 'user'
   }),
   methods: {
+    isAssassin(name) {
+      return _.find(this.room.players, { name: name, role: 'assassin' })
+    },
+    isKilled(name) {
+      return this.room.gameStatus.playerNameToKill === name
+    },
     getJusticePlayers() {
-      return _.filter(this.room.players)
+      return _.filter(this.room.players, player => {
+        return _.indexOf(['justice', 'merlin', 'percivale'], player.role) > -1
+      })
     },
     killMerlin(name) {
       this.io.socket.emit('kill merlin', {
