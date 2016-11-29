@@ -45,11 +45,11 @@ export default {
 <style>
 .round-status {
   &_item {
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
     border: 1px solid #e0e0e0;
     display: inline-block;
-    margin: 1rem;
+    margin: 0.5rem;
   }
 }
 </style>

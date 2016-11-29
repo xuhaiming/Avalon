@@ -36,13 +36,17 @@
         Confirm
     </button>
     <div v-if="room.gameStatus.selectionConfirmed">
-      <button v-if="isKing(user.name)" class="btn" @click="changePlayers">Change</button>
-      <button v-if="!getPlayerVoteInfo(user.name)" class="btn vote-button" @click="acceptPlayers">
-        <img class="mission-player z-depth-3 circle responsive-img" src="approve.jpg">
-      </button>
-      <button v-if="!getPlayerVoteInfo(user.name)" class="btn vote-button" @click="rejectPlayers">
-        <img class="mission-player z-depth-3 circle responsive-img" src="reject.jpg">
-      </button>
+      <div>
+        <button v-if="isKing(user.name)" class="btn" @click="changePlayers">Change</button>
+      </div>
+      <div class="vote-container">
+        <button v-if="!getPlayerVoteInfo(user.name)" class="btn vote-button" @click="acceptPlayers">
+          <img class="mission-player z-depth-3 circle responsive-img" src="approve.jpg">
+        </button>
+        <button v-if="!getPlayerVoteInfo(user.name)" class="btn vote-button" @click="rejectPlayers">
+          <img class="mission-player z-depth-3 circle responsive-img" src="reject.jpg">
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -169,17 +173,21 @@ export default {
   }
 
   & .vote-button {
-    padding: 0;
+    padding: 0.8rem 0.5rem;
+    padding-bottom: 0;
+    margin: 1rem;
     background-color: transparent;
-    box-shadow: none;
+    width: auto;
+    height: auto;
+    border-radius: 1rem;
 
     &:hover, &:active {
       background-color: transparent;
-      box-shadow: none;
     }
 
     & img {
-      width: 35px;
+      width: 5rem;
+      height: 5rem;
     }
   }
 }

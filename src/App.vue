@@ -51,6 +51,10 @@ export default {
   margin-top: 60px;
 }
 
+body {
+  padding-bottom: 5rem;
+}
+
 h1, h2 {
   font-weight: normal;
 }
