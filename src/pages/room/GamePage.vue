@@ -12,6 +12,10 @@
     <div v-if="room.gameStatus.step === 'goMission'">
       <go-mission />
     </div>
+
+    <div v-if="room.gameStatus.step === 'killMerlin'">
+      <kill-merlin />
+    </div>
   </div>
 </template>
 
@@ -21,6 +25,7 @@ import RoundStatus from './game/RoundStatus.vue'
 import PlayerSelection from './game/PlayerSelection.vue'
 import VoteConfirmation from './game/VoteConfirmation.vue'
 import GoMission from './game/GoMission.vue'
+import KillMerlin from './game/KillMerlin.vue'
 
 export default {
   name: 'roomGamePage',
@@ -31,7 +36,8 @@ export default {
     RoundStatus,
     PlayerSelection,
     VoteConfirmation,
-    GoMission
+    GoMission,
+    KillMerlin
   }
 }
 </script>
