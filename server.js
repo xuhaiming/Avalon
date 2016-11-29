@@ -97,6 +97,11 @@ io.on('connection', socket => {
 
   socket.on('join room', (data, callback) => {
     let joinedRoom = appData.rooms.find(room => room.id === data.id)
+    const existUser = _.find(joinedRoom.players, { name: data.username })
+
+    if (existUser) {
+      return
+    }
 
     joinedRoom.players.push({
       name: data.username,
