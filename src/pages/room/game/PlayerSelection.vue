@@ -6,19 +6,24 @@
           <th data-field="position">Position</th>
           <th data-field="player_name">Player</th>
           <th data-field="action" v-if="isKing(user.name) && !room.gameStatus.selectionConfirmed">Action</th>
-          <th data-field="status" v-else>Status</th>
+          <th data-field="status" v-else>Go Mission</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(player, index) in room.players" :class="{ 'voted-highlight' : getPlayerVoteInfo(player.name) }">
-          <td>{{ index + 1 }} {{ isKing(player.name) ? 'Lead': '' }}</td>
+          <td v-if="isKing(player.name)">
+            <img class="king z-depth-3 responsive-img" src="king.jpg">
+          </td>
+          <td v-else>{{ index + 1 }}</td>
           <td>{{ player.name }}</td>
           <td v-if="isKing(user.name) && !room.gameStatus.selectionConfirmed">
             <input type="checkbox" :id="`player_${player.name}`" :value="player.name" v-model="selectedPlayers">
             <label :for="`player_${player.name}`"></label>
           </td>
           <td v-else>
-            <span v-if="isPlayerSelected(player.name)">selected</span>
+            <span v-if="isPlayerSelected(player.name)">
+              <img class="mission-player z-depth-3 circle responsive-img" src="mission-player.jpg">
+            </span>
           </td>
         </tr>
       </tbody>
@@ -32,8 +37,12 @@
     </button>
     <div v-if="room.gameStatus.selectionConfirmed">
       <button v-if="isKing(user.name)" class="btn" @click="changePlayers">Change</button>
-      <button v-if="!getPlayerVoteInfo(user.name)" class="btn" @click="acceptPlayers">Accept</button>
-      <button v-if="!getPlayerVoteInfo(user.name)" class="btn" @click="rejectPlayers">Reject</button>
+      <button v-if="!getPlayerVoteInfo(user.name)" class="btn" @click="acceptPlayers">
+        <img class="mission-player z-depth-3 circle responsive-img" src="approve.jpg">
+      </button>
+      <button v-if="!getPlayerVoteInfo(user.name)" class="btn" @click="rejectPlayers">
+        <img class="mission-player z-depth-3 circle responsive-img" src="reject.jpg">
+      </button>
     </div>
   </div>
 </template>
@@ -148,6 +157,15 @@ export default {
 
   & .voted-highlight {
     color: #26a69a
+  }
+
+  & .mission-player {
+    width: 2rem;
+  }
+
+  & .king {
+    width: 2rem;
+    border-radius: 0.2rem;
   }
 }
 </style>
