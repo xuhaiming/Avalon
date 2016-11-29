@@ -1,6 +1,5 @@
 <template>
   <div id="room">
-      <p>User: <b>{{ this.user.name }}</b> - <b>{{ room. name }}</b></p>
       <div v-if="room.status === 'created'">
         <initial-page />
       </div>

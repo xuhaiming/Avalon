@@ -67,6 +67,9 @@ a {
   text-align: left;
 }
 
+.text-big {
+  font-size: 1.25rem;
+}
 .error{
   font-size: 0.75rem;
   color: #ef5350;

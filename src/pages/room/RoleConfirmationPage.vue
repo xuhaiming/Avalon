@@ -1,7 +1,7 @@
 <template>
   <div class="role-confirmation-page container">
     <div class="row">
-      <p class="col s12 text-float">
+      <p class="col s12 text-float text-big">
         You are <b>{{ currentUser.role }}</b>
       </p>
       <img class="z-depth-4 circle responsive-img" :src="`role-${currentUser.role}.jpg`">
