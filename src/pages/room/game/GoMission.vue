@@ -1,23 +1,31 @@
 <template>
-  <div>
-    <div>
-      <h4>Go Mission</h4>
-      <div v-for="missionPlayerName in getCurrentMission().selectedPlayerNames">
+  <div class="go-mission-page container">
+    <ul class="collection with-header flow-text text-align-left">
+      <li class="collection-header text-big"><b>Go Mission</b></li>
+      <li class="collection-item" v-for="missionPlayerName in getCurrentMission().selectedPlayerNames">
         <span>{{ missionPlayerName }}</span>
-        <span>{{ !getMissionPlayerVote(missionPlayerName) ? 'waiting' : 'done' }}</span>
-      </div>
-      <div v-if="isSelectedPlayer() && !getMissionPlayerVote(user.name)">
-        <button class="btn" @click="goMission(true)">Success</button>
-        <button class="btn" @click="goMission(false)">Destroy</button>
-      </div>
-      <div v-if="allMissionPlayersVoted()">
-        <h4>Result: <b>{{ isMissionSucceed() ? 'success' : 'failed'}}</b></h4>
-        <div>Success: {{ getMissionResultCount(true) }}</div>
-        <div>Fail: {{ getMissionResultCount(false) }}</div>
+        <span class="pull-right">{{ !getMissionPlayerVote(missionPlayerName) ? 'waiting' : 'done' }}</span>  
+      </li>
+    </ul>
+    <div v-if="isSelectedPlayer() && !getMissionPlayerVote(user.name)">
+      <button class="btn" @click="goMission(true)">Success</button>
+      <button class="btn" @click="goMission(false)">Destroy</button>
+    </div>
+    
+    <p class="flow-text text-big">
+      Result: <b>{{ isMissionSucceed() ? 'success' : 'failed'}}</b>
+    </p>
+    <p>
+      Success * <b>{{ getMissionResultCount(true) }}</b>
+      Fail * <b>{{ getMissionResultCount(false) }}</b>
+    </p>
 
-        <h5 v-if="hasConfirmedMissionResult()">Waiting for other players to confirm...</h5>
-        <button v-else class="btn" @click="confirmMissionResult">OK</button>
-      </div>
+    <div v-if="allMissionPlayersVoted()">
+      <p class="flow-text text-big" v-if="hasConfirmedMissionResult()">
+        Waiting for other players to confirm...
+      </p>
+      <button v-else class="btn" @click="confirmMissionResult">OK</button>
+    </div>
   </div>
 </template>
 

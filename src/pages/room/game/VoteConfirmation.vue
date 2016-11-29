@@ -1,20 +1,42 @@
 <template>
-  <div>
-    <div>
-      <h4>Mission players:</h4>
-      <div v-for="missionPlayer in getCurrentMission().selectedPlayerNames">{{ missionPlayer }}</div>
-    </div>
-    <h4>Vote result: <b>{{ isVoteRejected() ? 'Rejected' : 'passed' }}</b></h4>
-    <div>
-      <h5>Players voted accept: </h5>
-      <div v-for="vote in getAcceptedVotes()">{{ vote.name }}</div>
-      <h5>Players voted reject: </h5>
-      <div v-for="vote in getRejectedVotes()">{{ vote.name }}</div>
-    </div>
-    <h4 v-if="isVoteRejected()">Change <b>{{ room.players[getNextKingIndex()].name }}</b> to select mission players</h4>
-    <h4 v-else>Go mission!</h4>
-    <h5 v-if="confirmed()">Waiting for others to confirm...</h5>
+  <div class="vote-confirmation-page container">
+    <table class="centered striped">
+      <thead>
+        <tr>
+          <th data-field="player_name">Player</th>
+          <th data-field="isGoMission">Go Mission</th>
+          <th data-field="finalVote">Final Vote</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(player, index) in room.players">
+          <td>
+            {{ player.name }}
+            <span v-if="isKing(player.name)">
+              <img class="king z-depth-3 responsive-img" src="king.jpg">
+            </span>    
+          </td>
+          <td>
+            <span v-if="isPlayerSelected(player.name)">
+              <img class="mission-player z-depth-3 circle responsive-img" src="mission-player.jpg">
+            </span>
+          </td>
+          <td>
+            <span v-if="isPlayerAccepted(player.name)">
+              accept
+            </span>
+            <span v-else>
+              reject
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="flow-text text-big">Vote result: <b>{{ isVoteRejected() ? 'Rejected' : 'passed' }}</b></p>
+    <p class="flow-text text-big" v-if="confirmed()">Waiting for others to confirm...</p>
     <button v-else class="btn" @click="confirmVoteResult">OK</button>
+
   </div>
 </template>
 
@@ -28,19 +50,31 @@ export default {
   computed: mapState({
     io: 'io',
     user: 'user',
-    room: state => state.room.current
+    room: state => state.room.current,
+    king: state => state.room.current.players[state.room.current.gameStatus.kingIndex]
   }),
   methods: {
+    isKing(name) {
+      return this.king.name === name
+    },
+    getSelectedPlayerNames() {
+      const missionIndex = this.room.gameStatus.round - 1;
+      const currentMission = this.room.gameStatus.missions[missionIndex]
+
+      return currentMission.selectedPlayerNames
+    },
+    isPlayerSelected(name) {
+      const selectedPlayerNames = this.getSelectedPlayerNames();
+
+      return _.indexOf(selectedPlayerNames, name) > -1;
+    },
     getCurrentMission() {
       const missionIndex = this.room.gameStatus.round - 1;
 
       return this.room.gameStatus.missions[missionIndex]
     },
-    getAcceptedVotes() {
-      return _.filter(this.getCurrentMission().votes, { accept: true })
-    },
-    getRejectedVotes() {
-      return _.filter(this.getCurrentMission().votes, { accept: false })
+    isPlayerAccepted(name) {
+      return _.find(this.getCurrentMission().votes, { name: name, accept: true })
     },
     isVoteRejected() {
       return gameLogic.isVoteRejected(this.getCurrentMission().votes, this.room.players.length) 
@@ -60,3 +94,17 @@ export default {
   }
 }
 </script>
+<style>
+.vote-confirmation-page {
+  & .mission-player {
+    width: 2rem;
+  }
+
+  & .king {
+    width: 2rem;
+    border-radius: 0.3rem;
+    vertical-align: middle;
+    margin-left: 1rem;
+  }
+}
+</style>
