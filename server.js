@@ -153,7 +153,8 @@ io.on('connection', socket => {
           {
             selectedPlayerNames: [],
             votes: [],
-            results: []
+            results: [],
+            rejectedCount: 0
           }
         ],
         history: []
@@ -217,9 +218,20 @@ io.on('connection', socket => {
           votes: currentMission.votes
         }))
 
-        room.gameStatus.step = 'selection'
         currentMission.selectedPlayerNames = []
         currentMission.votes = []
+        currentMission.rejectedCount++
+
+        if (currentMission.rejectedCount === 5) {
+          room.gameStatus.round++
+          room.gameStatus.missions.push({
+            selectedPlayerNames: [],
+            votes: [],
+            results: []
+          })
+        }
+
+        room.gameStatus.step = 'selection'
         room.gameStatus.selectionConfirmed = false
         room.gameStatus.kingIndex = gameLogic.getNextKingIndex(room.gameStatus.kingIndex, room.players.length)
 
@@ -261,19 +273,54 @@ io.on('connection', socket => {
         results: currentMission.results
       }))
 
-      room.gameStatus.round++
-      room.gameStatus.step = 'selection'
-      room.gameStatus.selectionConfirmed = false
-      room.gameStatus.kingIndex = gameLogic.getNextKingIndex(room.gameStatus.kingIndex, room.players.length)
+      const gameResult = gameLogic.getGameResult(room.gameStatus.missions, room.players.length)
 
-      room.players.forEach(player => player.status = 'selecting')
+      if (gameResult.finished) {
+        if (gameResult.evilsWin) {
+          room.status = 'finished'
+          room.result = 'evilsWin'
+        } else {
+          room.gameStatus.step = 'killMerlin'
+        }
+      } else {
+        room.gameStatus.round++
+        room.gameStatus.step = 'selection'
+        room.gameStatus.selectionConfirmed = false
+        room.gameStatus.kingIndex = gameLogic.getNextKingIndex(room.gameStatus.kingIndex, room.players.length)
 
-      room.gameStatus.missions.push({
-        selectedPlayerNames: [],
-        votes: [],
-        results: []
-      })
+        room.players.forEach(player => player.status = 'selecting')
+
+        room.gameStatus.missions.push({
+          selectedPlayerNames: [],
+          votes: [],
+          results: []
+        })
+      }
     }
+
+    io.to(room.id).emit('room update', room)
+  })
+
+  socket.on('kill merlin', data => {
+    let room = appData.rooms.find(room => room.id === data.roomId)
+    const playerNameToKill = _.find(room.players, { name: data.playerToKill }).name
+
+    room.gameStatus.playerNameToKill = playerNameToKill
+
+    io.to(room.id).emit('room update', room)
+  })
+
+  socket.on('confirm kill merlin', data => {
+    let room = appData.rooms.find(room => room.id === data.roomId)
+    const playerToKill = _.find(room.players, { name: room.gameStatus.playerNameToKill })
+
+    if (playerToKill.role === 'merlin') {
+      room.result = 'evilsKillSuccess'
+    } else {
+      room.result = 'justiceWin'
+    }
+
+    room.status = 'finished'
 
     io.to(room.id).emit('room update', room)
   })
