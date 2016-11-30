@@ -189,6 +189,11 @@ io.on('connection', socket => {
     let room = appData.rooms.find(room => room.id === data.roomId)
     const missionIndex = room.gameStatus.round - 1;
     let currentMission = room.gameStatus.missions[missionIndex]
+    let existedVote = _.find(currentMission.votes, { name: data.username })
+
+    if (existedVote) {
+      return
+    }
 
     currentMission.votes.push({
       name: data.username,
@@ -213,6 +218,7 @@ io.on('connection', socket => {
     if (_.every(room.players, { status: 'voteConfirmed' })) {
       if (gameLogic.isVoteRejected(currentMission.votes, room.players.length)) {
         room.gameStatus.history.push(Object.assign({}, {
+          king: room.gameStatus.kingIndex,
           round: room.gameStatus.round,
           selectedPlayerNames: currentMission.selectedPlayerNames,
           votes: currentMission.votes
@@ -248,6 +254,11 @@ io.on('connection', socket => {
     let room = appData.rooms.find(room => room.id === data.roomId)
     const missionIndex = room.gameStatus.round - 1;
     let currentMission = room.gameStatus.missions[missionIndex]
+    const existMissionResult = _.find(currentMission.results, { name: data.username })
+
+    if (existMissionResult) {
+      return
+    }
 
     currentMission.results.push({
       name: data.username,
@@ -267,6 +278,7 @@ io.on('connection', socket => {
 
     if (_.every(room.players, { status: 'missionResultConfirmed' })) {
       room.gameStatus.history.push(Object.assign({}, {
+        king: room.gameStatus.kingIndex,
         round: room.gameStatus.round,
         selectedPlayerNames: currentMission.selectedPlayerNames,
         votes: currentMission.votes,
