@@ -2,13 +2,15 @@
   <div class="kill-merlin-page container">
     <ul class="collection with-header flow-text text-align-left">
       <li class="collection-header text-big"><b>Kill Merlin</b></li>
-      <li v-if="isAssassin(user.name)" class="collection-item" v-for="player in getJusticePlayers()">
+      <li class="collection-item" v-for="player in getJusticePlayers()">
         {{ player.name }}
-        <button class="btn pull-right" @click="killMerlin(player.name)">Kill</button>
-      </li>
-      <li v-else class="collection-item" v-for="player in getJusticePlayers()">
-        {{ player.name }}
-        <button v-if="isKilled(player.name)" class="btn pull-right">oh no</button>
+        <div class="pull-right" v-if="isAssassin(user.name)">
+          <img v-if="isKilled(player.name)" class="z-depth-2 sword" src="sword.jpg">
+          <button v-else class="btn" @click="killMerlin(player.name)">Kill</button>
+        </div>
+        <div class="pull-right" v-else>
+          <img class="z-depth-2 sword" src="sword.jpg" v-if="isKilled(player.name)">
+        </div>
       </li>
     </ul>
     <button v-if="isAssassin(user.name)" class="btn" @click="confirmKillMerlin()">Confirm</button>
@@ -18,6 +20,7 @@
 <script>
 import { mapState } from 'vuex'
 import _ from 'lodash'
+import gameLogic from '../../../../rules/gameLogic'
 
 export default {
   name: 'gameKillMerlin',
@@ -35,7 +38,7 @@ export default {
     },
     getJusticePlayers() {
       return _.filter(this.room.players, player => {
-        return _.indexOf(['justice', 'merlin', 'percivale'], player.role) > -1
+        return gameLogic.isJusticePlayer(player)
       })
     },
     killMerlin(name) {
@@ -45,10 +48,19 @@ export default {
       })
     },
     confirmKillMerlin() {
-      this.io.socket.emit('go mission', {
+      this.io.socket.emit('confirm kill merlin', {
         roomId: this.room.id
       })
     }
   }
 }
 </script>
+
+<style>
+.kill-merlin-page {
+  & .sword {
+    width: 1.2rem;
+    border-radius: 0.5rem;
+  }
+}
+</style>

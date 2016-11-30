@@ -1,30 +1,45 @@
 <template>
   <div class="go-mission-page container">
-    <ul class="collection with-header flow-text text-align-left">
-      <li class="collection-header text-big"><b>Go Mission</b></li>
-      <li class="collection-item" v-for="missionPlayerName in getCurrentMission().selectedPlayerNames">
-        <span>{{ missionPlayerName }}</span>
-        <span class="pull-right">{{ !getMissionPlayerVote(missionPlayerName) ? 'waiting' : 'done' }}</span>  
-      </li>
-    </ul>
-    <div v-if="isSelectedPlayer() && !getMissionPlayerVote(user.name)">
-      <button class="btn" @click="goMission(true)">Success</button>
-      <button class="btn" @click="goMission(false)">Destroy</button>
-    </div>
-    
-    <p class="flow-text text-big">
-      Result: <b>{{ isMissionSucceed() ? 'success' : 'failed'}}</b>
-    </p>
-    <p>
-      Success * <b>{{ getMissionResultCount(true) }}</b>
-      Fail * <b>{{ getMissionResultCount(false) }}</b>
-    </p>
-
     <div v-if="allMissionPlayersVoted()">
+      <p class="flow-text text-big">
+        <b>Result</b>
+        <div>
+          <img v-if="isMissionSucceed()" class="z-depth-1 responsive-img" src="mission-success.jpg">
+          <img v-else class="z-depth-1 responsive-img" src="mission-fail.jpg">
+        </div>
+      </p>
+      <div class="row">
+        <div class="col s6">
+          <img class="mission-player small z-depth-3 circle responsive-img" src="mission-support.jpg">
+          <span class="mission-result-text">X <b>{{ getMissionResultCount(true) }}</b></span>
+        </div>
+        <div class="col s6">
+          <img class="mission-player small z-depth-3 circle responsive-img" src="mission-destroy.jpg">
+          <span class="mission-result-text">X <b>{{ getMissionResultCount(false) }}</b></span>
+        </div>
+      </div>
       <p class="flow-text text-big" v-if="hasConfirmedMissionResult()">
         Waiting for other players to confirm...
       </p>
       <button v-else class="btn" @click="confirmMissionResult">OK</button>
+    </div>
+
+    <div v-else>
+      <ul class="collection with-header flow-text text-align-left">
+        <li class="collection-header text-big"><b>Go Mission</b></li>
+        <li class="collection-item" v-for="missionPlayerName in getCurrentMission().selectedPlayerNames">
+          <span>{{ missionPlayerName }}</span>
+          <span class="pull-right">{{ !getMissionPlayerVote(missionPlayerName) ? 'waiting' : 'done' }}</span>  
+        </li>
+      </ul>
+      <div v-if="isSelectedPlayer() && !getMissionPlayerVote(user.name)">
+        <button class="btn mission-button" @click="goMission(true)">
+          <img class="mission-player z-depth-3 circle responsive-img" src="mission-support.jpg">
+        </button>
+        <button class="btn mission-button" @click="goMission(false)">
+          <img class="mission-player z-depth-3 circle responsive-img" src="mission-destroy.jpg">
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -81,3 +96,37 @@ export default {
   }
 }
 </script>
+
+<style>
+.go-mission-page {
+  & .mission-button {
+    padding: 0.8rem 0.5rem;
+    padding-bottom: 0;
+    margin: 1rem;
+    background-color: transparent;
+    width: auto;
+    height: auto;
+    border-radius: 1rem;
+
+    &:hover, &:active {
+      background-color: transparent;
+    }
+
+    & img {
+      width: 5rem;
+      height: 5rem;
+    }
+  }
+
+  & .mission-player.small {
+    width: 4rem;
+    height: 4rem;
+    vertical-align: middle;
+  }
+
+  & .mission-result-text {
+    font-size: 1.5rem;
+    vertical-align: middle;
+  }
+}
+</style>

@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const missionsConfig = require('./missions')
+const roles = require('./roles')
 
 module.exports = {
   isVoteRejected(votes, playerCount) {
@@ -33,5 +34,8 @@ module.exports = {
       finished: successMissionCount === 3 || failMissionCount === 3,
       evilsWin: failMissionCount === 3
     }
+  },
+  isJusticePlayer(player) {
+    return roles[player.role].camp === 'justice'
   }
 }

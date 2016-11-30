@@ -23,10 +23,10 @@
           </td>
           <td>
             <span v-if="isPlayerAccepted(player.name)">
-              accept
+              <img class="mission-player z-depth-3 circle responsive-img" src="approve.jpg">
             </span>
             <span v-else>
-              reject
+              <img class="mission-player z-depth-3 circle responsive-img" src="reject.jpg">
             </span>
           </td>
         </tr>
