@@ -2,7 +2,7 @@
   <div class="go-mission-page container">
     <div v-if="allMissionPlayersVoted()">
       <p class="flow-text text-big">
-        <b>Result</b>
+        <h5><b>{{ isMissionSucceed() ? 'Success!' : 'Failed!'}}</b></h5>
         <div>
           <img v-if="isMissionSucceed()" class="z-depth-1 responsive-img" src="mission-success.jpg">
           <img v-else class="z-depth-1 responsive-img" src="mission-fail.jpg">

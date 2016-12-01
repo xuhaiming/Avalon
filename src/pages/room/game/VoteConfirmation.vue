@@ -94,6 +94,7 @@ export default {
   }
 }
 </script>
+
 <style>
 .vote-confirmation-page {
   & .mission-player {

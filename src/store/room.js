@@ -1,8 +1,8 @@
 export default {
   state: {
-      current: {
-        name: ''
-      }
+    current: {
+      name: ''
+    }
   },
   actions: {
     room_setCurrent({ commit, state }, room) {
