@@ -8,6 +8,6 @@ export default {
     io,
     user,    
     room,
-    rooms
+    rooms,
   }
 }
