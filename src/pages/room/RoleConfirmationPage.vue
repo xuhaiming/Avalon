@@ -12,7 +12,7 @@
       </ul>
     </div>
 
-    <div class="row">
+    <div v-if="!isCurrentUserConfirmed()" class="row">
       <button @click="conformRole" class="col s12 m6 offset-m3 btn">Confirm</button>    
     </div>
   </div>
@@ -21,6 +21,7 @@
 <script>
 import { mapState } from 'vuex'
 import RoleInfo from './game/RoleInfo.vue'
+import _ from 'lodash'
 
 export default {
   name: 'roomRoleConfirmationPage',
@@ -48,6 +49,9 @@ export default {
         roomId: this.room.id,
         username: this.user.name
       })
+    },
+    isCurrentUserConfirmed() {
+      return _.find(this.room.players, { name: this.user.name, status: 'roleConfirmed' })
     }
   }
 }

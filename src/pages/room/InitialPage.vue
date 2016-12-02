@@ -9,7 +9,7 @@
         </li>
       </ul>
     </div>
-    <div class="row">
+    <div v-if="!isCurrentUserReady()" class="row">
       <button @click="ready" class="col s12 m6 offset-m3 btn">ready</button>    
     </div>
   </div>
@@ -17,6 +17,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import _ from 'lodash'
 
 export default {
   name: 'roomInitialPage',
@@ -41,6 +42,9 @@ export default {
         roomId: this.room.id,
         username: this.user.name
       })
+    },
+    isCurrentUserReady() {
+      return _.find(this.room.players, { status: 'ready', name: this.user.name })
     }
   }
 }

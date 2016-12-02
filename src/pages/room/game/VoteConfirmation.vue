@@ -10,7 +10,7 @@
       </thead>
       <tbody>
         <tr v-for="(player, index) in room.players">
-          <td>
+          <td :class="{ 'teal-text': confirmed(player.name)}">
             {{ player.name }}
             <span v-if="isKing(player.name)">
               <img class="king z-depth-3 responsive-img" src="king.jpg">
@@ -34,8 +34,7 @@
     </table>
 
     <p class="flow-text text-big">Vote result: <b>{{ isVoteRejected() ? 'Rejected' : 'passed' }}</b></p>
-    <p class="flow-text text-big" v-if="confirmed()">Waiting for others to confirm...</p>
-    <button v-else class="btn" @click="confirmVoteResult">OK</button>
+    <button v-if="!confirmed(user.name)" class="btn" @click="confirmVoteResult">OK</button>
 
   </div>
 </template>
@@ -82,8 +81,8 @@ export default {
     getNextKingIndex() {
       return gameLogic.getNextKingIndex(this.room.gameStatus.kingIndex, this.room.players.length)
     },
-    confirmed() {
-      return _.find(this.room.players, { name: this.user.name }).status === 'voteConfirmed'
+    confirmed(name) {
+      return _.find(this.room.players, { name }).status === 'voteConfirmed'
     },
     confirmVoteResult() {
       this.io.socket.emit('vote confirm', {
