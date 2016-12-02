@@ -95,6 +95,14 @@ io.on('connection', socket => {
     socket.join(newRoom.id)
   })
 
+  socket.on('back to room', (data, callback) => {
+    let joinedRoom = appData.rooms.find(room => room.id === data.id)
+    
+    callback(joinedRoom)
+
+    socket.join(joinedRoom.id)
+  })
+
   socket.on('join room', (data, callback) => {
     let joinedRoom = appData.rooms.find(room => room.id === data.id)
     const existUser = _.find(joinedRoom.players, { name: data.username })

@@ -36,10 +36,22 @@ export default {
   created() {
     if (!this.user.name) {
       this.$router.push('/login')
+    } else {
+      this.updateRoomInfo()
+    }
+  },
+  methods: {
+    updateRoomInfo() {
+      this.io.socket.emit('back to room', {
+        id: this.$router.currentRoute.params.id
+      }, room => {
+        this.$store.dispatch('room_setCurrent', room)
+      })
     }
   },
   computed: mapState({
     user: 'user',
+    io: 'io',
     room: state => state.room.current
   })
 }
