@@ -42,6 +42,9 @@ export default {
 </script>
 
 <style>
+@import './styles/materialize.css';
+@import './styles/swiper.css';
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

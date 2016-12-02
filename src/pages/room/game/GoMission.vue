@@ -19,7 +19,9 @@
         </div>
       </div>
       <p class="flow-text text-big" v-if="hasConfirmedMissionResult()">
-        Waiting for other players to confirm...
+        <span>Waiting for </span> 
+        <span>{{ getUnconfirmedPlayerNames() }}</span>
+        <span> to confirm...</span>
       </p>
       <button v-else class="btn" @click="confirmMissionResult">OK</button>
     </div>
@@ -92,6 +94,11 @@ export default {
     },
     hasConfirmedMissionResult() {
       return _.find(this.room.players, { name: this.user.name }).status === 'missionResultConfirmed'
+    },
+    getUnconfirmedPlayerNames() {
+      const unconfirmedPlayers = _.filter(this.room.players, player => player.status !== 'missionResultConfirmed')
+
+      return _.map(unconfirmedPlayers, 'name').join(', ')
     }
   }
 }
