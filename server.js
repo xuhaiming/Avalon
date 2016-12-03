@@ -349,6 +349,6 @@ io.on('connection', socket => {
   })
 })
 
-http.listen(2000, () => {
-  console.log('Avalon app is running on port 2000!')
+http.listen(process.env.PORT || 2080, () => {
+  console.log('Avalon app is running!')
 })
