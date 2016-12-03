@@ -15,14 +15,17 @@ const compiler = webpack(config)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(webpackMiddleware(compiler, {
+if (process.env.NODE_ENV !== 'production') {
+  app.use(webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
     stats: { colors: true }
-}));
+  }))
 
-app.use(webpackHotMiddleWare(compiler))
+  app.use(webpackHotMiddleWare(compiler))
+}
 
 app.use(express.static('src/assets'))
+app.use(express.static('dist'))
 
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
