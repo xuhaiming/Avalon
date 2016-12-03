@@ -1,5 +1,5 @@
 <template>
-  <div class="role-info container">
+  <div class="role-info">
     <div class="row">
       <p class="col s12 text-float text-big">
         You are <b>{{ currentUser.role }}</b>
@@ -15,6 +15,23 @@
         </li>
       </ul>
     </div>
+
+    <div class="row">
+      <table class="centered striped">
+        <thead>
+          <tr>
+            <th data-field="role">Role</th>
+            <th data-field="canSee">Can see</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="role in getAllRoles()">
+            <td>{{ role }}</td>
+            <td>{{ getRolesCanSeeForRole(role) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -22,6 +39,7 @@
 import { mapState } from 'vuex'
 import _ from 'lodash'
 import roles from '../../../../rules/roles'
+import missionConfig from '../../../../rules/missions'
 
 export default {
   name: 'gameRoleInfo',
@@ -32,7 +50,7 @@ export default {
   methods: {
     getRolesCanSee() {
       const playersCanSee = this.getPlayersCanSee();
-      const rolesCanSee = _.map(playersCanSee, 'role').join(", ");
+      const rolesCanSee = _.map(playersCanSee, 'role').join(', ');
 
       return rolesCanSee;
     },
@@ -42,6 +60,15 @@ export default {
       const playersCanSee = _.filter(players, player => _.includes(rolesCanSee, player.role))
 
       return playersCanSee
+    },
+    getAllRoles() {
+      return _.find(missionConfig, { totalCount: this.room.players.length }).roles
+    },
+    getRolesCanSeeForRole(role) {
+      const fullCanSeeList = roles[role].canSee
+      const filteredList = _.filter(fullCanSeeList, role => _.includes(this.getAllRoles(), role))
+
+      return filteredList.join(', ')
     }
   }
 }

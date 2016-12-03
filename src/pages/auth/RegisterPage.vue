@@ -20,7 +20,9 @@
       </div>
 
       <div class="row">
-        <button @click="register" class="btn-large col s12">REGISTER</button>
+        <div class="col s12">
+          <button @click="register" class="btn-large full-width">REGISTER</button>
+        </div>
       </div>
       <p>Already have an account? Go <router-link to="login">Login</router-link></p>
     </div>

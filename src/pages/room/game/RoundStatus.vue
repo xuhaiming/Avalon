@@ -1,10 +1,11 @@
 <template>
   <div class="round-status">
-    <span v-for="status in getRoundStatus()">
+    <span v-for="(status, index) in getRoundStatus()">
       <span 
-        class="circle z-depth-1 round-status_item darken-3"
-        :class="{ red: status.fail, blue: status.success, grey: status.current }"
+        class="circle z-depth-1 round-status_item darken-2"
+        :class="{ red: status.fail, blue: status.success, grey: status.current, orange: isSpecialRound(index) }"
       >
+        {{ getCurrentMission().goMissionCounts[index] }}
       </span>
     </span>
   </div>
@@ -12,7 +13,9 @@
 
 <script>
 import { mapState } from 'vuex'
+import _ from 'lodash'
 import gameLogic from '../../../../rules/gameLogic'
+import missionConfig from '../../../../rules/missions'
 
 export default {
   name: 'gameRoundStatus',
@@ -37,6 +40,12 @@ export default {
       roundStatus[currentRound - 1].current = true
 
       return roundStatus
+    },
+    getCurrentMission() {
+      return _.find(missionConfig, { totalCount: this.room.players.length })
+    },
+    isSpecialRound(index) {
+      return this.getCurrentMission().evilsAllowed[index] === 1
     }
   }
 }
@@ -50,6 +59,14 @@ export default {
     border: 1px solid #e0e0e0;
     display: inline-block;
     margin: 0.5rem;
+    line-height: 2rem;
+
+    &.red,
+    &.blue,
+    &.grey,
+    &.orange {
+      color: white;
+    }
   }
 }
 </style>

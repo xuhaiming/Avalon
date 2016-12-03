@@ -40,7 +40,6 @@ module.exports = {
 		canSee: [
 			'morgana',
 			'assassin',
-			'mordred',
 			'minions'
 		]
 	},
@@ -53,8 +52,7 @@ module.exports = {
 		canSee: [
 			'morgana',
 			'assassin',
-			'mordred',
-			'minions'
+			'mordred'
 		]
 	}
 }

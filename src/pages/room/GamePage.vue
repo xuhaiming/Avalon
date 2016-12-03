@@ -1,16 +1,12 @@
 <template>
   <div class="game-page">
     <round-status />
-    <div class="function-bar">
-      <img class="function-bar_item z-depth-4 circle" src="vote.jpg" @click="switchTab('game')">
-      <img class="function-bar_item z-depth-4 circle" src="role.jpg" @click="switchTab('role')">
-      <img class="function-bar_item z-depth-4 circle" src="history.jpg" @click="switchTab('history')">
-    </div>
+    
     <div v-if="game.tab === 'history'">
       <history />
     </div>
 
-    <div v-if="game.tab === 'role'">
+    <div class="container" v-if="game.tab === 'role'">
       <role-info />
     </div>
 
@@ -30,6 +26,12 @@
       <div v-if="room.gameStatus.step === 'killMerlin'">
         <kill-merlin />
       </div>
+    </div>
+
+    <div class="function-bar">
+      <img class="function-bar_item z-depth-4 circle" src="vote.jpg" @click="switchTab('game')">
+      <img class="function-bar_item z-depth-4 circle" src="role.jpg" @click="switchTab('role')">
+      <img class="function-bar_item z-depth-4 circle" src="history.jpg" @click="switchTab('history')">
     </div>
   </div>
 </template>
@@ -71,6 +73,10 @@ export default {
 .game-page {
   & .function-bar {
     margin: 1rem 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
     &_item {
       cursor: pointer;

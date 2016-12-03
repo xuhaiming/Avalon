@@ -8,7 +8,9 @@
       <input v-model="password" type="password" @keyup.enter="login">
       
       <div class="row">
-        <button @click="login" class="btn-large col s12">Login</button>
+        <div class="col s12">
+          <button @click="login" class="btn-large full-width">Login</button>
+        </div>
       </div>
       <p>Don't have an account? Go <router-link to="register">Register</router-link></p>
     </div>

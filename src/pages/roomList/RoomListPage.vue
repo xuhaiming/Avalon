@@ -5,7 +5,7 @@
         <p>User: <b>{{user.name}}</b></p>
       </div>
       <div class="col s6">
-        <button @click="createRoom" class="btn pull-right">Create Room</button>
+        <button @click="createRoom" class="create-button btn-floating right hoverable">+</button>
       </div>
     </div>
     
@@ -69,10 +69,18 @@ export default {
 
 <style>
 .room-list-page{
+  & .create-button {
+    font-size: 1.5rem;
+  }
+
   & .user-info {
     & p {
       text-align: left;
     }
+  }
+
+  & .collection-header {
+    font-size: 1.2rem;
   }
 
   & h4 {

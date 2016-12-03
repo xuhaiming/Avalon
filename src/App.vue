@@ -55,15 +55,21 @@ export default {
 }
 
 body {
-  padding-bottom: 5rem;
+  padding-bottom: 5.5rem;
 }
 
 h1, h2 {
   font-weight: normal;
+  font-size: 2rem;
+  margin: 1.5rem 0;
 }
 
 a {
   color: #42b983;
+}
+
+.full-width {
+  width: 100%;
 }
 
 .pull-right {

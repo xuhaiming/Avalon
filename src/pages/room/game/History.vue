@@ -1,6 +1,6 @@
 <template>
   <div class="history-page container">
-    <h4>History</h4>
+    <h4 class="history-title">History</h4>
     <div class="history-container swiper-container">
       <div class="swiper-wrapper">
         <div class="swiper-slide" v-for="historyItem in history">
@@ -79,6 +79,10 @@ export default {
 
 <style>
 .history-page {
+  & .history-title {
+    font-size: 1.4rem;
+  }
+
   & .round {
     margin-top: 2rem;
   }

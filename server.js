@@ -12,8 +12,8 @@ const gameLogic = require('./rules/gameLogic')
 const app = express()
 const compiler = webpack(config)
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(webpackMiddleware(compiler, {
@@ -177,7 +177,7 @@ io.on('connection', socket => {
 
   socket.on('select mission players', data => {
     let room = appData.rooms.find(room => room.id === data.roomId)
-    const missionIndex = room.gameStatus.round - 1;
+    const missionIndex = room.gameStatus.round - 1
     let currentMission = room.gameStatus.missions[missionIndex]
 
     currentMission.selectedPlayerNames = data.selectedPlayerNames
@@ -187,7 +187,7 @@ io.on('connection', socket => {
 
   socket.on('update selection confirmation', data => {
     let room = appData.rooms.find(room => room.id === data.roomId)
-    const missionIndex = room.gameStatus.round - 1;
+    const missionIndex = room.gameStatus.round - 1
     let currentMission = room.gameStatus.missions[missionIndex]
 
     room.gameStatus.selectionConfirmed = data.selectionConfirmed
@@ -198,7 +198,7 @@ io.on('connection', socket => {
 
   socket.on('vote', data => {
     let room = appData.rooms.find(room => room.id === data.roomId)
-    const missionIndex = room.gameStatus.round - 1;
+    const missionIndex = room.gameStatus.round - 1
     let currentMission = room.gameStatus.missions[missionIndex]
     let existedVote = _.find(currentMission.votes, { name: data.username })
 
@@ -221,7 +221,7 @@ io.on('connection', socket => {
   socket.on('vote confirm', data => {
     let room = appData.rooms.find(room => room.id === data.roomId)
     let user = room.players.find(player => player.name === data.username)
-    const missionIndex = room.gameStatus.round - 1;
+    const missionIndex = room.gameStatus.round - 1
     let currentMission = room.gameStatus.missions[missionIndex]
 
     user.status = 'voteConfirmed'
@@ -263,7 +263,7 @@ io.on('connection', socket => {
 
   socket.on('go mission', data => {
     let room = appData.rooms.find(room => room.id === data.roomId)
-    const missionIndex = room.gameStatus.round - 1;
+    const missionIndex = room.gameStatus.round - 1
     let currentMission = room.gameStatus.missions[missionIndex]
     const existMissionResult = _.find(currentMission.results, { name: data.username })
 
@@ -349,6 +349,6 @@ io.on('connection', socket => {
   })
 })
 
-http.listen(process.env.PORT || 2080, () => {
+http.listen(process.env.PORT || 2000, () => {
   console.log('Avalon app is running!')
 })
