@@ -1,5 +1,5 @@
 <template>
-  <div class="role-confirmation-page container">
+  <div class="role-confirmation-page">
     <role-info />
 
     <div v-if="!isCurrentUserConfirmed()" class="row">

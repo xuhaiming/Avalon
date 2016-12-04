@@ -1,5 +1,5 @@
 <template>
-  <div class="initial-game-page container">
+  <div class="initial-game-page">
     <div class="row">
       <ul class="collection with-header col s12">
         <li class="collection-header"><b>{{ labels.players }}</b></li>

@@ -1,5 +1,5 @@
 <template>
-  <div class="room-list-page container">
+  <div class="room-list-page">
     <div class="row user-info">
       <div class="col s6">
         <p>{{ labels.user }}<b>{{user.name}}</b></p>

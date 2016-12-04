@@ -1,5 +1,5 @@
 <template>
-  <div class="vote-confirmation-page container">
+  <div class="vote-confirmation-page">
     <table class="centered striped">
       <thead>
         <tr>

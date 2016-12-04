@@ -1,5 +1,5 @@
 <template>
-  <div class="kill-merlin-page container">
+  <div class="kill-merlin-page">
     <ul class="collection with-header flow-text text-align-left">
       <li class="collection-header text-big"><b>Kill Merlin</b></li>
       <li class="collection-item" v-for="player in getJusticePlayers()">

@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="container">
-    <h1>{{ labels.title }}</h1>
     <language-switcher />
+    <h1>{{ labels.title }}</h1>
     <transition name="fade">
       <router-view></router-view>
     </transition>

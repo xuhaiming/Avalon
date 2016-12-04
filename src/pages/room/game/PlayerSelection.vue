@@ -1,5 +1,5 @@
 <template>
-  <div class="player-selection-page container">
+  <div class="player-selection-page">
     <table class="centered striped">
       <thead>
         <tr>

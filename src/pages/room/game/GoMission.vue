@@ -1,5 +1,5 @@
 <template>
-  <div class="go-mission-page container">
+  <div class="go-mission-page">
     <div v-if="allMissionPlayersVoted()">
       <p class="flow-text text-big">
         <h5><b>{{ isMissionSucceed() ? 'Success!' : 'Failed!'}}</b></h5>
