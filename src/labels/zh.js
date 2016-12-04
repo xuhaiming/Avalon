@@ -19,5 +19,33 @@ export default {
     allRooms: '全部房间',
     players: '名玩家',
     roomName: '的房间'
+  },
+  lobby: {
+    players: '玩家',
+    ready: '准备',
+    notReady: '未准备',
+    isReady: '已准备'
+  },
+  roleConfirmation: {
+    confirm: '确认',
+    waitingForOthers: '等待其他人确认中……',
+    notConfirmed: '等待确认',
+    confirmed: '已确认'
+  },
+  roles: {
+    merlin: '梅林',
+    percivale: '派西维尔',
+    loyal: '吃瓜忠臣',
+    morgana: '莫甘娜',
+    assassin: '刺客',
+    mordred: '莫德雷德',
+    oberon: '奥伯伦',
+    minions: '莫德雷德的爪牙'
+  },
+  roleInfo: {
+    youAre: '你是',
+    youCanSee: '你可以看到',
+    role: '角色',
+    canSee: '可以看到的角色'
   }
 }

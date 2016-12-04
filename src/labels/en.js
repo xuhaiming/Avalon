@@ -19,5 +19,33 @@ export default {
     allRooms: 'All Rooms',
     players: ' players',
     roomName: '\'s game'
+  },
+  lobby: {
+    players: 'players',
+    ready: 'ready',
+    notReady: 'not ready',
+    isReady: 'ready'
+  },
+  roleConfirmation: {
+    confirm: 'Confirm',
+    waitingForOthers: 'Waiting for others to confirm...',
+    notConfirmed: 'waiting for confirm',
+    confirmed: 'confirmed'
+  },
+  roles: {
+    merlin: 'Merlin',
+    percivale: 'Percival',
+    loyal: 'Loyal',
+    morgana: 'Morgana',
+    assassin: 'Assassin',
+    mordred: 'Modered',
+    oberon: 'Oberon',
+    minions: 'Minions'
+  },
+  roleInfo: {
+    youAre: 'You are ',
+    youCanSee: 'You can see ',
+    role: 'Role',
+    canSee: 'Can see'
   }
 }

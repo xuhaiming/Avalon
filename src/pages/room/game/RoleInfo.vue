@@ -2,14 +2,14 @@
   <div class="role-info">
     <div class="row">
       <p class="col s12 text-float text-big">
-        You are <b>{{ currentUser.role }}</b>
+        {{ roleInfoLabels.youAre }}<b>{{ getRoleLabel(currentUser.role) }}</b>
       </p>
       <img class="z-depth-4 circle responsive-img" :src="`role-${currentUser.role}.jpg`">
     </div>
 
     <div class="row" v-if="getPlayersCanSee().length != 0">
       <ul class="collection with-header col s12">
-        <li class="collection-header"><b>You can see {{ getRolesCanSee() }}</b></li>
+        <li class="collection-header"><b>{{ roleInfoLabels.youCanSee }}{{ getRolesCanSee() }}</b></li>
         <li class="collection-item" v-for="personCanSee in getPlayersCanSee()">
           {{ personCanSee.name }}
         </li>
@@ -20,13 +20,13 @@
       <table class="centered striped">
         <thead>
           <tr>
-            <th data-field="role">Role</th>
-            <th data-field="canSee">Can see</th>
+            <th data-field="role">{{ roleInfoLabels.role }}</th>
+            <th data-field="canSee">{{ roleInfoLabels.canSee }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="role in getAllRoles()">
-            <td>{{ role }}</td>
+            <td>{{ getRoleLabel(role) }}</td>
             <td>{{ getRolesCanSeeForRole(role) }}</td>
           </tr>
         </tbody>
@@ -45,12 +45,17 @@ export default {
   name: 'gameRoleInfo',
   computed: mapState({
     room: state => state.room.current,
-    currentUser: state => _.find(state.room.current.players, { name: state.user.name })
+    currentUser: state => _.find(state.room.current.players, { name: state.user.name }),
+    roleInfoLabels: state => state.labels.current.roleInfo,
+    rolesLabel: state => state.labels.current.roles
   }),
   methods: {
+    getRoleLabel(role) {
+      return this.rolesLabel[role]
+    },
     getRolesCanSee() {
       const playersCanSee = this.getPlayersCanSee();
-      const rolesCanSee = _.map(playersCanSee, 'role').join(', ');
+      const rolesCanSee = _.map(playersCanSee, player => this.getRoleLabel(player.role)).join(', ');
 
       return rolesCanSee;
     },
@@ -67,8 +72,9 @@ export default {
     getRolesCanSeeForRole(role) {
       const fullCanSeeList = roles[role].canSee
       const filteredList = _.filter(fullCanSeeList, role => _.includes(this.getAllRoles(), role))
+      const roleLabels = _.map(filteredList, role => this.getRoleLabel(role))
 
-      return filteredList.join(', ')
+      return roleLabels.join(', ')
     }
   }
 }

@@ -2,7 +2,7 @@
   <div class="initial-game-page container">
     <div class="row">
       <ul class="collection with-header col s12">
-        <li class="collection-header"><b>Players</b></li>
+        <li class="collection-header"><b>{{ labels.players }}</b></li>
         <li class="collection-item" v-for="player in room.players">
           {{ player.name }}
           <span class="pull-right">{{ getPlayerStatus(player.status) }}</span>  
@@ -10,7 +10,7 @@
       </ul>
     </div>
     <div v-if="!isCurrentUserReady()" class="row">
-      <button @click="ready" class="col s12 m6 offset-m3 btn">ready</button>    
+      <button @click="ready" class="col s12 m6 offset-m3 btn">{{ labels.ready }}</button>    
     </div>
   </div>
 </template>
@@ -24,15 +24,14 @@ export default {
   computed: mapState({
     io: 'io',
     user: 'user',
-    room: state => state.room.current
+    room: state => state.room.current,
+    labels: state => state.labels.current.lobby
   }),
   methods: {
     getPlayerStatus(status) {
       const statusMapping = {
-        joined: 'not ready',
-        ready: 'ready',
-        offline: 'offline',
-        roleConfirmed: 'confirmed'
+        joined: this.labels.notReady,
+        ready: this.labels.isReady
       }
 
       return statusMapping[status]
