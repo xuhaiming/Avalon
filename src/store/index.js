@@ -3,6 +3,7 @@ import user from './user'
 import room from './room'
 import rooms from './rooms'
 import game from './game'
+import labels from './labels'
 
 export default {
   modules: {
@@ -10,6 +11,7 @@ export default {
     user,    
     room,
     rooms,
-    game
+    game,
+    labels
   }
 }

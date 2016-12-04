@@ -2,7 +2,7 @@
   <div class="room-list-page container">
     <div class="row user-info">
       <div class="col s6">
-        <p>User: <b>{{user.name}}</b></p>
+        <p>{{ labels.user }}<b>{{user.name}}</b></p>
       </div>
       <div class="col s6">
         <button @click="createRoom" class="create-button btn-floating right hoverable">+</button>
@@ -10,10 +10,10 @@
     </div>
     
     <div class="collection with-header">
-      <h4 class="collection-header">All Rooms</h4>
+      <h4 class="collection-header">{{ labels.allRooms }}</h4>
       <a class="collection-item" v-for="room in rooms.list" v-if="isNotInRoom(room)" @click="joinRoom(room)">
-        {{ room.name }}
-        <span>{{room.players.length}} {{ room.players.length > 1 ? 'persons' : 'person' }} in total</span>
+        {{ room.name }}{{ labels.roomName }}
+        <span>{{ room.players.length }} {{ labels.players }}</span>
       </a>
     </div>
   </div>
@@ -26,11 +26,12 @@ import axios from 'axios'
 
 export default {
   name: 'roomListPage',
-  computed: mapState([
-    'io',
-    'user',
-    'rooms'
-  ]),
+  computed: mapState({
+    io: 'io',
+    user: 'user',
+    rooms: 'rooms',
+    labels: state => state.labels.current.roomList
+  }),
   created() {
     if (!this.user.name) {
       this.$router.push('/login')

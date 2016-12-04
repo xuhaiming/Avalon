@@ -82,7 +82,7 @@ io.on('connection', socket => {
     const newRoom = {
       id: shortid.generate(),
       host: username,
-      name: `${username}'s game`,
+      name: `${username}`,
       players: [{
         name: username,
         status: 'joined'

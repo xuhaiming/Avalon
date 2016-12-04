@@ -1,18 +1,18 @@
 <template>
   <div class="login-page row">
     <div class="col s12 m6 offset-m3">
-      <p v-if="showError" class="error">Username or password is not correct</p>
-      <p class="flow-text text-align-left">Username</p>
+      <p v-if="showError" class="error">{{ labels.incorrectPassword }}</p>
+      <p class="flow-text text-align-left">{{ labels.username }}</p>
       <input v-model="username" type="text" autofocus>
-      <p class="flow-text text-align-left">Password</p>
+      <p class="flow-text text-align-left">{{ labels.password }}</p>
       <input v-model="password" type="password" @keyup.enter="login">
       
       <div class="row">
         <div class="col s12">
-          <button @click="login" class="btn-large full-width">Login</button>
+          <button @click="login" class="btn-large full-width">{{ labels.login }}</button>
         </div>
       </div>
-      <p>Don't have an account? Go <router-link to="register">Register</router-link></p>
+      <p>{{ labels.noAccount }}<router-link to="register">{{ labels.register }}</router-link></p>
     </div>
   </div>
 </template>
@@ -29,9 +29,10 @@ export default {
       showError: false
     }
   },
-  computed: mapState([
-    'io'
-  ]),
+  computed: mapState({
+    io: 'io',
+    labels: state => state.labels.current.account
+  }),
   methods: {
     navigateAfterLogin() {
       axios.get('/api/rooms')

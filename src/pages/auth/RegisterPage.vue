@@ -1,13 +1,13 @@
 <template>
   <div class="register-page row">
     <div class="col s12 m6 offset-m3">
-      <p class="flow-text text-align-left">Username</p>
+      <p class="flow-text text-align-left">{{ labels.username }}</p>
       <input v-model="username" type="text" autofocus>
-      <p class="flow-text text-align-left">Password</p>
+      <p class="flow-text text-align-left">{{ labels.password }}</p>
       <input v-model="password" type="password">
       <p class="flow-text text-align-left">
-        Confirm Password 
-        <span v-if="passwordNotMatch" class="error">Doesn't match your password</span>
+        {{ labels.confirmPassword }} 
+        <span v-if="passwordNotMatch" class="error">{{ labels.passwordNotMatch }}</span>
         </p>
       <input 
         v-model="passwordToConfirm"
@@ -16,15 +16,15 @@
         @keyup.enter="register">
       
       <div v-if="showError" class="row error">
-        <div>This user has already been registered.</div>
+        <div>{{ labels.alreadyRegistered }}</div>
       </div>
 
       <div class="row">
         <div class="col s12">
-          <button @click="register" class="btn-large full-width">REGISTER</button>
+          <button @click="register" class="btn-large full-width">{{ labels.register }}</button>
         </div>
       </div>
-      <p>Already have an account? Go <router-link to="login">Login</router-link></p>
+      <p>{{ labels.alreadyHaveAccound }}<router-link to="login">{{ labels.login }}</router-link></p>
     </div>
   </div>
 </template>
@@ -41,9 +41,10 @@ export default {
       showError: false
     }
   },
-  computed: mapState([
-    'io'
-  ]),
+  computed: mapState({
+    io: 'io',
+    labels: state => state.labels.current.account
+  }),
   methods: {
     register() {
       if(this.username && this.password && !this.passwordNotMatch) {

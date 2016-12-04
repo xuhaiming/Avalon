@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="container">
-    <h1>{{title}}</h1>
+    <h1>{{ labels.title }}</h1>
+    <language-switcher />
     <transition name="fade">
       <router-view></router-view>
     </transition>
@@ -10,19 +11,19 @@
 <script>
 import io from 'socket.io-client'
 import { mapState } from 'vuex'
+import LanguageSwitcher from './LanguageSwitcher.vue'
 
 const socket = io()
 
 export default {
   name: 'app',
-  data () {
-    return {
-      title: 'Avalon'
-    }
+  computed: mapState({
+    io: 'io',
+    labels: state => state.labels.current.home
+  }),
+  components: {
+    LanguageSwitcher
   },
-  computed: mapState([
-    'io'
-  ]),
   created() {
     this.$store.dispatch('io_setSocket', socket)
     this.initializeSocket()
