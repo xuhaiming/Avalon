@@ -47,5 +47,59 @@ export default {
     youCanSee: 'You can see ',
     role: 'Role',
     canSee: 'Can see'
+  },
+  playerSelection: {
+    position: 'Position',
+    player: 'Player',
+    selection: 'Selection',
+    confirm: 'Confirm',
+    change: 'Change'
+  },
+  votePlayers: {
+    accept: 'Accept',
+    reject: 'Reject',
+    accepted: 'accepted',
+    rejected: 'rejected',
+    youHave: 'You have ',
+    theMission: ' the mission.',
+    voted: 'Voted',
+    waitingForVote: 'Waiting...'
+  },
+  voteConfirmation: {
+    player: 'Player',
+    missionPlayer: 'Go Mission',
+    vote: 'Vote',
+    voteResult: 'Vote result: ',
+    passed: 'Passed',
+    rejected: 'Rejected',
+    confirm: 'OK'
+  },
+  mission: {
+    success: 'Success!',
+    failed: 'Failed!',
+    waitingFor: 'Waiting for ',
+    toConfirm: ' to confirm...',
+    confirm: 'OK',
+    goMission: 'Go Mission',
+    waiting: 'Waiting...',
+    done: 'Done'
+  },
+  history: {
+    history: 'History',
+    round: 'Round: ',
+    player: 'Player',
+    missionPlayer: 'Mission Player',
+    vote: 'Vote'
+  },
+  killMerlin: {
+    title: 'Kill Merlin',
+    kill: 'Kill',
+    confirm: 'Confirm'
+  },
+  gameResult: {
+    title: 'Game Result',
+    evilsWin: 'Evils Win!',
+    wrongKill: 'Evils killed wrong Merlin, Justice Win!',
+    correctKill: 'Evils killed correct Merlin, Evils Win!'
   }
 }

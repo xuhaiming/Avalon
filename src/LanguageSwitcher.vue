@@ -1,7 +1,7 @@
 <template>
   <div class="language-swither-page">
-    <button v-if="labels.language === 'zh'" class="right btn-floating hoverable" @click="switchLanguage('en')">EN</button>
-    <button v-else class="right btn-floating hoverable" @click="switchLanguage('zh')">中文</button>
+    <a v-if="labels.language === 'zh'" href="#" class="right" @click="switchLanguage('en')">EN</a>
+    <a v-else class="right" href="#" @click="switchLanguage('zh')">中文</a>
   </div>
 </template>
 
@@ -23,6 +23,7 @@ export default {
 <style>
   .language-swither-page {
     position: relative;
+    top: 0.3rem;
 
     & button {
       position: absolute;

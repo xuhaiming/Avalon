@@ -3,10 +3,9 @@
     <table class="centered striped">
       <thead>
         <tr>
-          <th data-field="position">Position</th>
-          <th data-field="player_name">Player</th>
-          <th data-field="action" v-if="isKing(user.name) && !room.gameStatus.selectionConfirmed">Action</th>
-          <th data-field="status" v-else>Go Mission</th>
+          <th data-field="position">{{ labels.position }}</th>
+          <th data-field="player_name">{{ labels.player }}</th>
+          <th data-field="selection">{{ labels.selection }}</th>
         </tr>
       </thead>
       <tbody>
@@ -33,11 +32,11 @@
       v-if="this.selectedPlayers.length === this.goMissionCount && !room.gameStatus.selectionConfirmed && isKing(user.name)" 
       class="btn" 
       @click="confirmPlayers">
-        Confirm
+        {{ labels.confirm }}
     </button>
     <div v-if="room.gameStatus.selectionConfirmed">
       <div>
-        <button v-if="isKing(user.name)" class="btn" @click="changePlayers">Change</button>
+        <button v-if="isKing(user.name)" class="btn" @click="changePlayers">{{ labels.change }}</button>
       </div>
       <div class="vote-container">
         <button v-if="!getPlayerVoteInfo(user.name)" class="btn vote-button" @click="acceptPlayers">
@@ -76,7 +75,8 @@ export default {
         const currentRules = _.find(missionsConfig, { totalCount: playerCount })
 
         return currentRules.goMissionCounts[state.room.current.gameStatus.round - 1]
-    }
+    },
+    labels: state => state.labels.current.playerSelection
   }),
   methods: {
     getSelectedPlayerNames() {

@@ -2,7 +2,7 @@
   <div class="go-mission-page">
     <div v-if="allMissionPlayersVoted()">
       <p class="flow-text text-big">
-        <h5><b>{{ isMissionSucceed() ? 'Success!' : 'Failed!'}}</b></h5>
+        <h5><b>{{ isMissionSucceed() ? labels.success : labels.failed }}</b></h5>
         <div>
           <img v-if="isMissionSucceed()" class="z-depth-1 responsive-img" src="mission-success.jpg">
           <img v-else class="z-depth-1 responsive-img" src="mission-fail.jpg">
@@ -19,19 +19,19 @@
         </div>
       </div>
       <p class="flow-text text-big" v-if="hasConfirmedMissionResult()">
-        <span>Waiting for </span> 
+        <span>{{ labels.waitingFor }}</span> 
         <span>{{ getUnconfirmedPlayerNames() }}</span>
-        <span> to confirm...</span>
+        <span>{{ labels.toConfirm }}</span>
       </p>
-      <button v-else class="btn" @click="confirmMissionResult">OK</button>
+      <button v-else class="btn" @click="confirmMissionResult">{{ labels.confirm }}</button>
     </div>
 
     <div v-else>
       <ul class="collection with-header flow-text text-align-left">
-        <li class="collection-header text-big"><b>Go Mission</b></li>
+        <li class="collection-header text-big"><b>{{ labels.goMission }}</b></li>
         <li class="collection-item" v-for="missionPlayerName in getCurrentMission().selectedPlayerNames">
           <span>{{ missionPlayerName }}</span>
-          <span class="pull-right">{{ !getMissionPlayerVote(missionPlayerName) ? 'waiting' : 'done' }}</span>  
+          <span class="pull-right">{{ !getMissionPlayerVote(missionPlayerName) ? labels.waiting : labels.done }}</span>  
         </li>
       </ul>
       <div v-if="isSelectedPlayer() && !getMissionPlayerVote(user.name)">
@@ -56,7 +56,8 @@ export default {
   computed: mapState({
     io: 'io',
     user: 'user',
-    room: state => state.room.current
+    room: state => state.room.current,
+    labels: state => state.labels.current.mission
   }),
   methods: {
     getCurrentMission() {

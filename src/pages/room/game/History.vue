@@ -1,17 +1,17 @@
 <template>
   <div class="history-page container">
-    <h4 class="history-title">History</h4>
+    <h4 class="history-title">{{ labels.history }}</h4>
     <div class="history-container swiper-container">
       <div class="swiper-wrapper">
         <div class="swiper-slide" v-for="historyItem in history">
-          <div class="round"><b>Round: {{ historyItem.round }}</b></div>
+          <div class="round"><b>{{ labels.round }}{{ historyItem.round }}</b></div>
 
           <table class="centered striped">
             <thead>
               <tr>
-                <th data-field="player_name">Player</th>
-                <th data-field="isGoMission">Go Mission</th>
-                <th data-field="finalVote">Final Vote</th>
+                <th data-field="player_name">{{ labels.player }}</th>
+                <th data-field="isGoMission">{{ labels.missionPlayer}}</th>
+                <th data-field="finalVote">{{ labels.vote }}</th>
               </tr>
             </thead>
             <tbody>
@@ -59,7 +59,8 @@ export default {
     io: 'io',
     user: 'user',
     room: state => state.room.current,
-    history: state => state.room.current.gameStatus.history
+    history: state => state.room.current.gameStatus.history,
+    labels: state => state.labels.current.history
   }),
   mounted() {
     new Swiper ('.swiper-container', {

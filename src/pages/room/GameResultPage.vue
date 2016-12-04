@@ -1,9 +1,9 @@
 <template>
   <div class="game-result-page">
-    <div>Game result</div>
-    <div v-if="room.result === 'evilsWin'">Evils Win!</div>
-    <div v-if="room.result === 'justiceWin'">Evils killed wrong Merlin, Justice Win!</div>
-    <div v-if="room.result === 'evilsKillSuccess'">Evils killed correct Merlin, Evils Win!</div>
+    <h5>{{ labels.title }}</h5>
+    <div v-if="room.result === 'evilsWin'">{{ labels.evilsWin }}</div>
+    <div v-if="room.result === 'justiceWin'">{{ labels.wrongKill }}</div>
+    <div v-if="room.result === 'evilsKillSuccess'">{{ labels.correctKill }}</div>
     <div>
       <div class="player-container" v-for="player in room.players">
         <span><img class="z-depth-3 circle responsive-img role-image" :src="`role-${player.role}.jpg`"></span>
@@ -20,6 +20,7 @@ export default {
   name: 'roomGameResultPage',
   computed: mapState({
     room: state => state.room.current,
+    labels: state => state.labels.current.gameResult
   })
 }
 </script>

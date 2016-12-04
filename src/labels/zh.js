@@ -47,5 +47,59 @@ export default {
     youCanSee: '你可以看到',
     role: '角色',
     canSee: '可以看到的角色'
+  },
+  playerSelection: {
+    position: '位置',
+    player: '玩家',
+    selection: '出任务候选',
+    confirm: '确定',
+    change: '换人'
+  },
+  votePlayers: {
+    accept: '同意',
+    reject: '拒绝',
+    accepted: '同意了',
+    rejected: '拒绝了',
+    youHave: '你已经',
+    theMission: '出任务',
+    voted: '已投票',
+    waitingForVote: '等待投票'
+  },
+  voteConfirmation: {
+    player: '玩家',
+    missionPlayer: '出任务',
+    vote: '投票',
+    voteResult: '投票结果：',
+    passed: '出任务',
+    rejected: '换下个人选',
+    confirm: '确定'
+  },
+  mission: {
+    success: '任务成功！',
+    failed: '任务失败！',
+    waitingFor: '等待',
+    toConfirm: '确认中',
+    confirm: '确定',
+    goMission: '出任务',
+    waiting: '等待中……',
+    done: '已出任务'
+  },
+  history: {
+    history: '历史记录',
+    round: '出任务回合：',
+    player: '玩家',
+    missionPlayer: '出任务',
+    vote: '投票'
+  },
+  killMerlin: {
+    title: '杀梅林',
+    kill: '杀！',
+    confirm: '确定'
+  },
+  gameResult: {
+    title: '游戏结束',
+    evilsWin: '坏人获胜！',
+    wrongKill: '杀手杀错了梅林，好人获胜！',
+    correctKill: '杀手杀死了梅林，坏人获胜！'
   }
 }

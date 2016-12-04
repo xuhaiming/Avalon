@@ -3,9 +3,9 @@
     <table class="centered striped">
       <thead>
         <tr>
-          <th data-field="player_name">Player</th>
-          <th data-field="isGoMission">Go Mission</th>
-          <th data-field="finalVote">Final Vote</th>
+          <th data-field="player_name">{{ labels.player }}</th>
+          <th data-field="isGoMission">{{ labels.missionPlayer }}</th>
+          <th data-field="finalVote">{{ labels.vote }}</th>
         </tr>
       </thead>
       <tbody>
@@ -33,8 +33,8 @@
       </tbody>
     </table>
 
-    <p class="flow-text text-big">Vote result: <b>{{ isVoteRejected() ? 'Rejected' : 'passed' }}</b></p>
-    <button v-if="!confirmed(user.name)" class="btn" @click="confirmVoteResult">OK</button>
+    <p class="flow-text text-big">{{ labels.voteResult }}<b>{{ isVoteRejected() ? labels.rejected : labels.passed }}</b></p>
+    <button v-if="!confirmed(user.name)" class="btn" @click="confirmVoteResult">{{ labels.confirm }}</button>
 
   </div>
 </template>
@@ -50,7 +50,8 @@ export default {
     io: 'io',
     user: 'user',
     room: state => state.room.current,
-    king: state => state.room.current.players[state.room.current.gameStatus.kingIndex]
+    king: state => state.room.current.players[state.room.current.gameStatus.kingIndex],
+    labels: state => state.labels.current.voteConfirmation
   }),
   methods: {
     isKing(name) {

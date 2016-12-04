@@ -1,19 +1,19 @@
 <template>
   <div class="kill-merlin-page">
     <ul class="collection with-header flow-text text-align-left">
-      <li class="collection-header text-big"><b>Kill Merlin</b></li>
+      <li class="collection-header text-big"><b>{{ labels.title }}</b></li>
       <li class="collection-item" v-for="player in getJusticePlayers()">
         {{ player.name }}
         <div class="pull-right" v-if="isAssassin(user.name)">
           <img v-if="isKilled(player.name)" class="z-depth-2 sword" src="sword.jpg">
-          <button v-else class="btn" @click="killMerlin(player.name)">Kill</button>
+          <button v-else class="btn" @click="killMerlin(player.name)">{{ labels.kill }}</button>
         </div>
         <div class="pull-right" v-else>
           <img class="z-depth-2 sword" src="sword.jpg" v-if="isKilled(player.name)">
         </div>
       </li>
     </ul>
-    <button v-if="isAssassin(user.name)" class="btn" @click="confirmKillMerlin()">Confirm</button>
+    <button v-if="isAssassin(user.name)" class="btn" @click="confirmKillMerlin()">{{ labels.confirm }}</button>
   </div>
 </template>
 
@@ -27,7 +27,8 @@ export default {
   computed: mapState({
     room: state => state.room.current,
     io: 'io',
-    user: 'user'
+    user: 'user',
+    labels: state => state.labels.current.killMerlin
   }),
   methods: {
     isAssassin(name) {
