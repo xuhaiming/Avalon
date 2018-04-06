@@ -19,7 +19,7 @@ module.exports = {
         options: {
           loaders: {
             css: ExtractTextPlugin.extract({
-              loader: 'css-loader'
+              use: 'css-loader'
             })
           }
         }
@@ -37,8 +37,8 @@ module.exports = {
         }
       },
       { 
-        test: /\.css$/, 
-        loader: "style-loader!css-loader" 
+        test: /\.css$/,
+        loader: "style-loader!css-loader"
       },
     ]
   },
