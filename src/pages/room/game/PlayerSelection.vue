@@ -9,41 +9,73 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(player, index) in room.players" :class="{ 'voted-highlight' : getPlayerVoteInfo(player.name) }">
+        <tr
+          v-for="(player, index) in room.players"
+          :class="{ 'voted-highlight': getPlayerVoteInfo(player.name) }"
+        >
           <td v-if="isKing(player.name)">
-            <img class="king z-depth-3 responsive-img" src="king.jpg">
+            <img class="king z-depth-3 responsive-img" src="king.jpg" />
           </td>
           <td v-else>{{ index + 1 }}</td>
           <td>{{ player.name }}</td>
           <td v-if="isKing(user.name) && !room.gameStatus.selectionConfirmed">
-            <input type="checkbox" :id="`player_${player.name}`" :value="player.name" v-model="selectedPlayers">
+            <input
+              type="checkbox"
+              :id="`player_${player.name}`"
+              :value="player.name"
+              v-model="selectedPlayers"
+            />
             <label :for="`player_${player.name}`"></label>
           </td>
           <td v-else>
             <span v-if="isPlayerSelected(player.name)">
-              <img class="mission-player z-depth-3 circle responsive-img" src="mission-player.jpg">
+              <img
+                class="mission-player z-depth-3 circle responsive-img"
+                src="mission-player.jpg"
+              />
             </span>
           </td>
         </tr>
       </tbody>
     </table>
-    <br>
-    <button 
-      v-if="this.selectedPlayers.length === this.goMissionCount && !room.gameStatus.selectionConfirmed && isKing(user.name)" 
-      class="btn" 
-      @click="confirmPlayers">
-        {{ labels.confirm }}
+    <br />
+    <button
+      v-if="
+        this.selectedPlayers.length === this.goMissionCount &&
+        !room.gameStatus.selectionConfirmed &&
+        isKing(user.name)
+      "
+      class="btn"
+      @click="confirmPlayers"
+    >
+      {{ labels.confirm }}
     </button>
     <div v-if="room.gameStatus.selectionConfirmed">
       <div>
-        <button v-if="isKing(user.name)" class="btn" @click="changePlayers">{{ labels.change }}</button>
+        <button v-if="isKing(user.name)" class="btn" @click="changePlayers">
+          {{ labels.change }}
+        </button>
       </div>
       <div class="vote-container">
-        <button v-if="!getPlayerVoteInfo(user.name)" class="btn vote-button" @click="acceptPlayers">
-          <img class="mission-player z-depth-3 circle responsive-img" src="approve.jpg">
+        <button
+          v-if="!getPlayerVoteInfo(user.name)"
+          class="btn vote-button"
+          @click="acceptPlayers"
+        >
+          <img
+            class="mission-player z-depth-3 circle responsive-img"
+            src="approve.jpg"
+          />
         </button>
-        <button v-if="!getPlayerVoteInfo(user.name)" class="btn vote-button" @click="rejectPlayers">
-          <img class="mission-player z-depth-3 circle responsive-img" src="reject.jpg">
+        <button
+          v-if="!getPlayerVoteInfo(user.name)"
+          class="btn vote-button"
+          @click="rejectPlayers"
+        >
+          <img
+            class="mission-player z-depth-3 circle responsive-img"
+            src="reject.jpg"
+          />
         </button>
       </div>
     </div>
@@ -51,39 +83,42 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import missionsConfig from '../../../../rules/missions'
-import VoteMissionPlayers from './VoteMissionPlayers.vue'
+import { mapState } from "vuex";
+import missionsConfig from "../../../../rules/missions";
+import VoteMissionPlayers from "./VoteMissionPlayers.vue";
 
 export default {
-  name: 'gamePlayerSelection',
+  name: "gamePlayerSelection",
   data() {
     return {
-      selectedPlayers: []
-    }
+      selectedPlayers: [],
+    };
   },
   components: {
-    VoteMissionPlayers
+    VoteMissionPlayers,
   },
   computed: mapState({
-    io: 'io',
-    user: 'user',
-    room: state => state.room.current,
-    king: state => state.room.current.players[state.room.current.gameStatus.kingIndex],
-    goMissionCount: state => {
-        const playerCount = state.room.current.players.length
-        const currentRules = _.find(missionsConfig, { totalCount: playerCount })
+    io: "io",
+    user: "user",
+    room: (state) => state.room.current,
+    king: (state) =>
+      state.room.current.players[state.room.current.gameStatus.kingIndex],
+    goMissionCount: (state) => {
+      const playerCount = state.room.current.players.length;
+      const currentRules = _.find(missionsConfig, { totalCount: playerCount });
 
-        return currentRules.goMissionCounts[state.room.current.gameStatus.round - 1]
+      return currentRules.goMissionCounts[
+        state.room.current.gameStatus.round - 1
+      ];
     },
-    labels: state => state.labels.current.playerSelection
+    labels: (state) => state.labels.current.playerSelection,
   }),
   methods: {
     getSelectedPlayerNames() {
       const missionIndex = this.room.gameStatus.round - 1;
-      const currentMission = this.room.gameStatus.missions[missionIndex]
+      const currentMission = this.room.gameStatus.missions[missionIndex];
 
-      return currentMission.selectedPlayerNames
+      return currentMission.selectedPlayerNames;
     },
     isPlayerSelected(name) {
       const selectedPlayerNames = this.getSelectedPlayerNames();
@@ -91,56 +126,52 @@ export default {
       return _.indexOf(selectedPlayerNames, name) > -1;
     },
     confirmPlayers() {
-      this.io.socket.emit('update selection confirmation', {
+      this.io.socket.emit("update selection confirmation", {
         roomId: this.room.id,
-        selectionConfirmed: true
-      })
+        selectionConfirmed: true,
+      });
     },
     changePlayers() {
-      this.io.socket.emit('update selection confirmation', {
+      this.io.socket.emit("update selection confirmation", {
         roomId: this.room.id,
-        selectionConfirmed: false
-      })
+        selectionConfirmed: false,
+      });
     },
     acceptPlayers() {
-      this.io.socket.emit('vote', {
+      this.io.socket.emit("vote", {
         roomId: this.room.id,
         username: this.user.name,
-        accept: true
-      })
+        accept: true,
+      });
     },
     rejectPlayers() {
-      this.io.socket.emit('vote', {
+      this.io.socket.emit("vote", {
         roomId: this.room.id,
         username: this.user.name,
-        accept: false
-      })
+        accept: false,
+      });
     },
     getCurrentMissionVotes() {
       const missionIndex = this.room.gameStatus.round - 1;
 
-      return this.room.gameStatus.missions[missionIndex].votes
+      return this.room.gameStatus.missions[missionIndex].votes;
     },
     getPlayerVoteInfo(name) {
-      return _.find(this.getCurrentMissionVotes(), { name })
+      return _.find(this.getCurrentMissionVotes(), { name });
     },
     isKing(name) {
-      return this.king.name === name
-    }
+      return this.king.name === name;
+    },
   },
   watch: {
     selectedPlayers(value, oldValue) {
-      if (this.selectedPlayers.length > this.goMissionCount) {
-        this.selectedPlayers = oldValue
-      } else {
-        this.io.socket.emit('select mission players', {
-          roomId: this.room.id,
-          selectedPlayerNames: this.selectedPlayers
-        })
-      }
-    }
-  }
-}
+      this.io.socket.emit("select mission players", {
+        roomId: this.room.id,
+        selectedPlayerNames: this.selectedPlayers,
+      });
+    },
+  },
+};
 </script>
 
 <style>
@@ -156,11 +187,11 @@ export default {
   }
 
   & td {
-    font-size: 1.25rem
+    font-size: 1.25rem;
   }
 
   & .voted-highlight {
-    color: #26a69a
+    color: #26a69a;
   }
 
   & .mission-player {
@@ -181,7 +212,8 @@ export default {
     height: auto;
     border-radius: 1rem;
 
-    &:hover, &:active {
+    &:hover,
+    &:active {
       background-color: transparent;
     }
 

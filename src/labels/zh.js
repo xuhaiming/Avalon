@@ -100,6 +100,7 @@ export default {
     title: '游戏结束',
     evilsWin: '坏人获胜！',
     wrongKill: '杀手杀错了梅林，好人获胜！',
-    correctKill: '杀手杀死了梅林，坏人获胜！'
+    correctKill: '杀手杀死了梅林，坏人获胜！',
+    backToList: '返回房间列表'
   }
 }

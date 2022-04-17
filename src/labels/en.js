@@ -100,6 +100,7 @@ export default {
     title: 'Game Result',
     evilsWin: 'Evils Win!',
     wrongKill: 'Evils killed wrong Merlin, Justice Win!',
-    correctKill: 'Evils killed correct Merlin, Evils Win!'
+    correctKill: 'Evils killed correct Merlin, Evils Win!',
+    backToList: 'Back to rooms'
   }
 }
