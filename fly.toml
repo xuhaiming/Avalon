@@ -1,4 +1,4 @@
-# fly.toml file generated for avalon on 2023-03-17T22:26:55+08:00
+# fly.toml file generated for avalon on 2023-03-17T22:57:46+08:00
 
 app = "avalon"
 kill_signal = "SIGINT"
