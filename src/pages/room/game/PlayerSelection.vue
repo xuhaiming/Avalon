@@ -165,6 +165,14 @@ export default {
   },
   watch: {
     selectedPlayers(value, oldValue) {
+      if (value.length > this.goMissionCount) {
+        this.$nextTick(() => {
+          this.selectedPlayers = oldValue;
+          this.$forceUpdate();
+        });
+
+        return;
+      }
       this.io.socket.emit("select mission players", {
         roomId: this.room.id,
         selectedPlayerNames: this.selectedPlayers,
