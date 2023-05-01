@@ -53,7 +53,9 @@ export default {
     player: '玩家',
     selection: '出任务候选',
     confirm: '确定',
-    change: '换人'
+    change: '换人',
+    approve: '同意',
+    reject: '拒绝'
   },
   votePlayers: {
     accept: '同意',
@@ -82,7 +84,9 @@ export default {
     confirm: '确定',
     goMission: '出任务',
     waiting: '等待中……',
-    done: '已出任务'
+    done: '已出任务',
+    passMission: '过任务',
+    failMission: '让任务失败',
   },
   history: {
     history: '历史记录',

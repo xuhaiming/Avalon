@@ -37,9 +37,11 @@
       <div v-if="isSelectedPlayer() && !getMissionPlayerVote(user.name)">
         <button class="btn mission-button" @click="goMission(true)">
           <img class="mission-player z-depth-3 circle responsive-img" src="mission-support.jpg">
+          <p class="text-small">{{ labels.passMission }}</p>
         </button>
         <button class="btn mission-button" @click="goMission(false)">
           <img class="mission-player z-depth-3 circle responsive-img" src="mission-destroy.jpg">
+          <p class="text-small">{{ labels.failMission }}</p>
         </button>
       </div>
     </div>
@@ -123,6 +125,14 @@ export default {
     & img {
       width: 5rem;
       height: 5rem;
+    }
+
+    & p {
+      color: black;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-top: -1rem;
+      margin-bottom: 0;
     }
   }
 

@@ -66,6 +66,7 @@
             class="mission-player z-depth-3 circle responsive-img"
             src="approve.jpg"
           />
+          <p class="text-small">{{ labels.approve }}</p>
         </button>
         <button
           v-if="!getPlayerVoteInfo(user.name)"
@@ -76,6 +77,7 @@
             class="mission-player z-depth-3 circle responsive-img"
             src="reject.jpg"
           />
+          <p class="text-small">{{ labels.reject }}</p>
         </button>
       </div>
     </div>
@@ -228,6 +230,14 @@ export default {
     & img {
       width: 5rem;
       height: 5rem;
+    }
+
+    & p {
+      color: black;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-top: -1rem;
+      margin-bottom: 0;
     }
   }
 }

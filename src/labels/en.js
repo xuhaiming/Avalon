@@ -53,7 +53,9 @@ export default {
     player: 'Player',
     selection: 'Selection',
     confirm: 'Confirm',
-    change: 'Change'
+    change: 'Change',
+    approve: 'Approve',
+    reject: 'Reject'
   },
   votePlayers: {
     accept: 'Accept',
@@ -75,14 +77,16 @@ export default {
     confirm: 'OK'
   },
   mission: {
-    success: 'Success!',
-    failed: 'Failed!',
+    success: 'Mission Success!',
+    failed: 'Mission Failed!',
     waitingFor: 'Waiting for ',
     toConfirm: ' to confirm...',
     confirm: 'OK',
     goMission: 'Go Mission',
     waiting: 'Waiting...',
-    done: 'Done'
+    done: 'Done',
+    passMission: 'Pass',
+    failMission: 'Fail',
   },
   history: {
     history: 'History',
